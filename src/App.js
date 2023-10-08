@@ -4,6 +4,7 @@ import "./App.css";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Landing from "./pages/Landing";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import { UserAuthContextProvider } from "./utils/AuthContext";
 
@@ -14,6 +15,7 @@ function App() {
         <Col>
           <UserAuthContextProvider>
             <Routes>
+              
               <Route
                 path="/home"
                 element={
@@ -22,8 +24,9 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route path="/" element={<Login />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/" element={<Landing/>} />
             </Routes>
           </UserAuthContextProvider>
         </Col>

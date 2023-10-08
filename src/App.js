@@ -1,4 +1,3 @@
-import { Container, Row, Col } from "react-bootstrap";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -10,9 +9,6 @@ import NavBar from "./utils/Navbar";
 
 function App() {
   return (
-    <Container style={{ width: "400px" }}>
-      <Row>
-        <Col>
           <UserAuthContextProvider>
             <NavBar />
             <Routes>
@@ -29,9 +25,6 @@ function App() {
               <Route path="/" element={<Landing/>} />
             </Routes>
           </UserAuthContextProvider>
-        </Col>
-      </Row>
-    </Container>
   );
 }
 

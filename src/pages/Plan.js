@@ -11,8 +11,11 @@ import {
   FormControlLabel,
 } from '@mui/material';
 import FadeIn from './FadeIn';
+import exportUserData from './exportUserData';
 
 const steps = ['Destinations', 'Travel Details', 'Preferences'];
+
+
 
 const TravelForm = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -48,6 +51,24 @@ const TravelForm = () => {
       setEndDateError('');
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
+  };
+
+  const handleSubmit = () => {
+    // Call the exportUserData function to get the user data as a JSON object
+    const userData = exportUserData(
+      numDestinations,
+      destinations,
+      startDate,
+      endDate,
+      numberOfPeople,
+      dietaryRestrictions,
+      activities
+    );
+
+    // Log the user data to the console for now
+    console.log(userData);
+
+    // You can take further actions with the userData, such as sending it to a server
   };
 
   const handleBack = () => {
@@ -101,6 +122,14 @@ const TravelForm = () => {
           {activeStep === steps.length ? (
             <div>
               <Typography>All steps completed</Typography>
+              {/* Add the exportUserData logic here, which is the last step */}
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSubmit} // Call the handleSubmit function when the "Finish" button is pressed
+              >
+                Export Data
+              </Button>
             </div>
           ) : (
             <FadeIn>
@@ -256,7 +285,7 @@ const TravelForm = () => {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={handleNext}
+                  onClick={activeStep === steps.length - 1 ? handleSubmit : handleNext}
                   disabled={activeStep === 0 && (!destinations.every((destination) => destination.trim() !== '') || showDestinationError)}
                 >
                   {activeStep === steps.length - 1 ? 'Finish' : 'Next'}

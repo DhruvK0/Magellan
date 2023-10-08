@@ -10,6 +10,7 @@ import {
   FormGroup,
   FormControlLabel,
 } from '@mui/material';
+import FadeIn from './FadeIn';
 
 const steps = ['Destinations', 'Travel Details', 'Preferences'];
 
@@ -27,13 +28,22 @@ const TravelForm = () => {
     restaurants: false,
   });
   const [endDateError, setEndDateError] = useState('');
+  const [showDestinationError, setShowDestinationError] = useState(false); // New state variable
+
+
 
   const handleNext = () => {
     if (activeStep === 0) {
-      setActiveStep(1); // Move to the next step after specifying the number of destinations.
+      // Check if all destination fields are filled before proceeding
+      const isFilled = destinations.every((destination) => destination.trim() !== '');
+      if (isFilled) {
+        setShowDestinationError(false); // Clear the error
+        setActiveStep(1); // Move to the next step after specifying the number of destinations.
+      } else {
+        setShowDestinationError(true); // Set to true to display an error
+      }
     } else if (activeStep === 1 && endDate <= startDate) {
       setEndDateError('End date must be after the start date');
-      return;
     } else {
       setEndDateError('');
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -45,9 +55,15 @@ const TravelForm = () => {
   };
 
   const handleNumDestinationsChange = (e) => {
-    const num = parseInt(e.target.value, 10) || 0; // Ensure it's not less than 0
-    setNumDestinations(num > 0 ? num : 0); // Ensure it's not less than 0
-    setDestinations(new Array(num).fill(''));
+    const num = parseInt(e.target.value, 10);
+    if (isNaN(num) || num < 0) {
+      setNumDestinations('');
+      // Display an error message here if needed
+    } else {
+      setNumDestinations(num);
+      setDestinations(new Array(num).fill(''));
+      // Clear any existing error message here if needed
+    }
   };
 
   const handleDestinationChange = (index, value) => {
@@ -57,8 +73,14 @@ const TravelForm = () => {
   };
 
   const handleNumberOfPeopleChange = (e) => {
-    const num = parseInt(e.target.value, 10) || 0; // Ensure it's not less than 0
-    setNumberOfPeople(num > 0 ? num : 0); // Ensure it's not less than 0
+    const num = parseInt(e.target.value, 10);
+    if (isNaN(num) || num < 0) {
+      setNumberOfPeople('');
+      // Display an error message here if needed
+    } else {
+      setNumberOfPeople(num);
+      // Clear any existing error message here if needed
+    }
   };
 
   // Add the class 'overflow-y-auto' to enable scrolling when destinations exceed 3
@@ -81,7 +103,7 @@ const TravelForm = () => {
               <Typography>All steps completed</Typography>
             </div>
           ) : (
-            <div>
+            <FadeIn>
               {activeStep === 0 && (
                 <div className="space-y-4">
                   <Typography variant="h6">Destinations</Typography>
@@ -92,10 +114,15 @@ const TravelForm = () => {
                     fullWidth
                     value={numDestinations}
                     onChange={handleNumDestinationsChange}
+                    error={numDestinations === '' || numDestinations < 0}
+                    helperText={
+                      numDestinations === '' || numDestinations < 0
+                        ? 'Please enter a valid number (0 or greater)'
+                        : ''
+                    }
                     InputLabelProps={{
                       shrink: true,
                     }}
-                    inputProps={{ min: 0 }} // Ensure it's not less than 0
                   />
                   <div className={`space-y-2 ${destinationsContainerClass}`}>
                     {destinations.map((destination, index) => (
@@ -108,8 +135,14 @@ const TravelForm = () => {
                         onChange={(e) =>
                           handleDestinationChange(index, e.target.value)
                         }
+                        error={showDestinationError && destination.trim() === ''} // Display error if the button is clicked
                       />
                     ))}
+                    {showDestinationError && (
+                      <Typography variant="body2" color="error">
+                        Please fill in all destination fields.
+                      </Typography>
+                    )}
                   </div>
                 </div>
               )}
@@ -147,10 +180,15 @@ const TravelForm = () => {
                     fullWidth
                     value={numberOfPeople}
                     onChange={handleNumberOfPeopleChange}
+                    error={numberOfPeople === '' || numberOfPeople < 0}
+                    helperText={
+                      numberOfPeople === '' || numberOfPeople < 0
+                        ? 'Please enter a valid number (0 or greater)'
+                        : ''
+                    }
                     InputLabelProps={{
                       shrink: true,
                     }}
-                    inputProps={{ min: 0 }} // Ensure it's not less than 0
                   />
                 </div>
               )}
@@ -219,11 +257,12 @@ const TravelForm = () => {
                   variant="contained"
                   color="primary"
                   onClick={handleNext}
+                  disabled={activeStep === 0 && (!destinations.every((destination) => destination.trim() !== '') || showDestinationError)}
                 >
                   {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                 </Button>
               </div>
-            </div>
+            </FadeIn>
           )}
         </div>
       </div>

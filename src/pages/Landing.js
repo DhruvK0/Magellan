@@ -7,7 +7,7 @@ import { useUserAuth } from "../utils/AuthContext";
 const Landing = () => {
     return (
         <div>
-            <h1>Magellan</h1>
+            <h1 className="font-bold underline">Magellan</h1>
             <Link to="/login">Login</Link>
         </div>
     )

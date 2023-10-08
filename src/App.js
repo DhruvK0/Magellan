@@ -7,6 +7,7 @@ import Signup from "./pages/Signup";
 import Landing from "./pages/Landing";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import { UserAuthContextProvider } from "./utils/AuthContext";
+import NavBar from "./utils/Navbar";
 
 function App() {
   return (
@@ -14,8 +15,8 @@ function App() {
       <Row>
         <Col>
           <UserAuthContextProvider>
+            <NavBar />
             <Routes>
-              
               <Route
                 path="/home"
                 element={

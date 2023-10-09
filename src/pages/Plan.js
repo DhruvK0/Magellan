@@ -14,10 +14,9 @@ import FadeIn from './FadeIn';
 import exportUserData from './exportUserData';
 import { useNavigate } from 'react-router-dom';
 import { useItinerary } from '../utils/ItineraryContext';
+import axios from 'axios';
 
 const steps = ['Destinations', 'Travel Details', 'Preferences'];
-
-
 
 const TravelForm = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -82,7 +81,7 @@ const TravelForm = () => {
     axios.post('http://localhost:5000/generate_itinerary', payload)
       .then((response) => {
         console.log(response.data);
-        setItinerary(responseData.itinerary); // <-- Using setItinerary from context
+        setItinerary(response.data.itinerary); // <-- Using setItinerary from context
         navigate('/ItineraryDisplay');
         navigate('/itinerary', { state: { itinerary: response.data.itinerary } });
       })

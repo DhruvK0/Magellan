@@ -79,33 +79,43 @@ const TravelForm = () => {
     
     const payload = formatApiPayload();
     
-    try {
-      const response = await fetch('/generate_itinerary', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
+    axios.post('http://localhost:5000/generate_itinerary', payload)
+      .then((response) => {
+        console.log(response.data);
+        setItinerary(responseData.itinerary); // <-- Using setItinerary from context
+        navigate('/ItineraryDisplay');
+        navigate('/itinerary', { state: { itinerary: response.data.itinerary } });
+      })
+      .catch((error) => {
+        console.error("There was an error sending the data!", error);
       });
+    // try {
+    //   const response = await fetch('/generate_itinerary', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(payload),
+    //   });
   
-      if (!response.ok) {
-        throw new Error('Network response was not ok' + response.statusText);
-      }
+    //   if (!response.ok) {
+    //     throw new Error('Network response was not ok' + response.statusText);
+    //   }
       
-      const responseData = await response.json();
+    //   const responseData = await response.json();
   
-      // You can now use the returned itinerary data as needed
-      console.log('Returned itinerary:', responseData.itinerary);
+    //   // You can now use the returned itinerary data as needed
+    //   console.log('Returned itinerary:', responseData.itinerary);
   
-      // Maybe navigate to a new page, update the UI, etc.
-      setItinerary(responseData.itinerary); // <-- Using setItinerary from context
-      navigate('/ItineraryDisplay');
+    //   // Maybe navigate to a new page, update the UI, etc.
+    //   setItinerary(responseData.itinerary); // <-- Using setItinerary from context
+    //   navigate('/ItineraryDisplay');
       
-    } catch (error) {
-      console.error('Fetch error: ', error.message);
+    // } catch (error) {
+    //   console.error('Fetch error: ', error.message);
   
-      // Handle errors as needed, maybe update the UI to notify the user
-    }
+    //   // Handle errors as needed, maybe update the UI to notify the user
+    // }
   };
   
   const { setItinerary } = useItinerary();

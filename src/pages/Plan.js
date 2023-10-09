@@ -14,6 +14,7 @@ import FadeIn from './FadeIn';
 import exportUserData from './exportUserData';
 import { useNavigate } from 'react-router-dom';
 
+
 const steps = ['Destinations', 'Travel Details', 'Preferences'];
 
 
@@ -40,6 +41,19 @@ const TravelForm = () => {
   const [showDestinationError, setShowDestinationError] = useState(false); // New state variable
   const navigate = useNavigate();
 
+  const formatApiPayload = () => {
+    return {
+      destination: destinations[0], // Assuming first destination from your destinations array
+      activities: Object.keys(activities).filter((activity) => activities[activity]),
+      num_travelers: numberOfPeople,
+      dates: {
+        start_date: startDate,
+        end_date: endDate,
+      },
+      diet: dietaryRestrictions,
+    };
+  };
+  
 
 
   const handleNext = () => {
@@ -60,24 +74,40 @@ const TravelForm = () => {
     }
   };
 
-  const handleSubmit = () => {
-    // Call the exportUserData function to get the user data as a JSON object
-    const userData = exportUserData(
-      numDestinations,
-      destinations,
-      startDate,
-      endDate,
-      numberOfPeople,
-      dietaryRestrictions,
-      activities
-    );
-
-    // Log the user data to the console for now
-    console.log(userData);
-
-    // You can take further actions with the userData, such as sending it to a server
-    navigate('/generate');
+  const handleSubmit = async (event) => {
+    event.preventDefault(); // Prevent the default form submission behavior
+    
+    const payload = formatApiPayload();
+    
+    try {
+      const response = await fetch('/generate_itinerary', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok' + response.statusText);
+      }
+      
+      const responseData = await response.json();
+  
+      // You can now use the returned itinerary data as needed
+      console.log('Returned itinerary:', responseData.itinerary);
+  
+      // Maybe navigate to a new page, update the UI, etc.
+      setItinerary(responseData.itinerary); // <-- Using setItinerary from context
+      navigate('/ItineraryDisplay');
+      
+    } catch (error) {
+      console.error('Fetch error: ', error.message);
+  
+      // Handle errors as needed, maybe update the UI to notify the user
+    }
   };
+  
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);

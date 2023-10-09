@@ -8,10 +8,12 @@ import ItineraryTimeline from "./pages/Generate";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import { UserAuthContextProvider } from "./utils/AuthContext";
 import NavBar from "./utils/Navbar";
+import { ItineraryProvider } from "./utils/ItineraryContext";
 
 function App() {
   return (
-          <UserAuthContextProvider>
+    <ItineraryProvider>
+      <UserAuthContextProvider>
             <NavBar />
             <Routes>
               <Route
@@ -29,6 +31,7 @@ function App() {
               <Route path="/" element={<Landing/>} />
             </Routes>
           </UserAuthContextProvider>
+    </ItineraryProvider>     
   );
 }
 

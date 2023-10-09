@@ -13,7 +13,7 @@ import {
 import FadeIn from './FadeIn';
 import exportUserData from './exportUserData';
 import { useNavigate } from 'react-router-dom';
-
+import { useItinerary } from '../utils/ItineraryContext';
 
 const steps = ['Destinations', 'Travel Details', 'Preferences'];
 
@@ -108,6 +108,7 @@ const TravelForm = () => {
     }
   };
   
+  const { setItinerary } = useItinerary();
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);

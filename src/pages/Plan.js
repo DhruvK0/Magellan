@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import FadeIn from './FadeIn';
 import exportUserData from './exportUserData';
+import { useNavigate } from 'react-router-dom';
 
 const steps = ['Destinations', 'Travel Details', 'Preferences'];
 
@@ -37,6 +38,7 @@ const TravelForm = () => {
   });
   const [endDateError, setEndDateError] = useState('');
   const [showDestinationError, setShowDestinationError] = useState(false); // New state variable
+  const navigate = useNavigate();
 
 
 
@@ -74,6 +76,7 @@ const TravelForm = () => {
     console.log(userData);
 
     // You can take further actions with the userData, such as sending it to a server
+    navigate('/generate');
   };
 
   const handleBack = () => {

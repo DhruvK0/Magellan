@@ -4,6 +4,7 @@ import { Grid, Typography, Button, Paper } from '@mui/material';
 import { motion } from 'framer-motion'; // For animation
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import landingImage from '../assets/img6.jpg';
 
 const Landing = () => {
   let navigate = useNavigate();
@@ -23,7 +24,7 @@ const Landing = () => {
   return (
     <div className="min-h-screen overflow-hidden mx-1/6">
       {/* First Third */}
-      <div className="min-h-screen flex flex-col justify-center items-center relative">
+      <div className="min-h-screen justify-center items-center relative top-20">
         <Grid container spacing={2}>
         {/* Empty Column before Text */}
           <Grid item xs={0} sm={2}></Grid>
@@ -47,16 +48,16 @@ const Landing = () => {
           <Grid item xs={0} sm={1}></Grid>
           {/* Right Image Card */}
           <Grid item xs={12} sm={5}>
-            <Paper elevation={3} className="bg-white rounded-lg p-4 shadow-md">
+            <div elevation={3} className="bg-white rounded-lg p-4 shadow-md">
               {/* Your image goes here */}
-              <img src="your-image-placeholder-url" alt="Travel Destination" />
-            </Paper>
+                <img src={landingImage} alt="Travel" className='object-fill'/>
+            </div>
           </Grid>
           {/* Empty Column after Image */}
           <Grid item xs={0} sm={2}></Grid>
         </Grid>
         {/* Learn More */}
-        
+
       </div>
 
       {/* Second Third */}

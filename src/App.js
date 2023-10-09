@@ -14,7 +14,7 @@ function App() {
             <NavBar />
             <Routes>
               <Route
-                path="/home"
+                path="/profile"
                 element={
                   <ProtectedRoute>
                     <Home />

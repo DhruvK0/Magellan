@@ -1,162 +1,113 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
+import React, { useState, useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserCircle, faCalendar, faSignOutAlt, faBars } from '@fortawesome/free-solid-svg-icons';
+import { useUserAuth } from '../utils/AuthContext';
+import { useNavigate } from 'react-router';
+import { GiShipWheel } from "react-icons/gi";
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
+import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 
-const pages = ['Plan', 'Contact Us', 'Join Waitlist'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+export function BasicMenu() {
+  const { logOut, user} = useUserAuth();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  
+  const navigate = useNavigate();
 
-function NavBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
-
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      navigate("/");
+      handleClose();
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
+  const handleProfile = () => {
+    try {
+      navigate("/profile");
+      handleClose();
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  const handlePlan = () => {
+    try {
+      navigate("/plan");
+      handleClose();
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  const handleLogin = () => {
+    try {
+      navigate("/login");
+      handleClose();
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   return (
-    <AppBar class='w-full sticky bg-gray-400	'>
-      <Container>
-        <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            MAGELLAN
-          </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            MAGELLAN
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
-
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+    <div>
+      <Button
+        id="basic-button"
+        aria-controls={open ? 'basic-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={handleClick}
+      >
+        <FontAwesomeIcon color="black" icon={faBars} size="xl" className='mt-1.5' />
+      </Button>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem onClick={handlePlan} >Plan a Trip</MenuItem>
+        <MenuItem onClick={handleProfile}>My Profile</MenuItem>
+        {user ? <MenuItem onClick={handleLogout}>Logout</MenuItem> : <MenuItem onClick={handleLogin}>Login</MenuItem>}
+      </Menu>
+    </div>
   );
 }
-export default NavBar;
+
+const Navbar = () => {
+  return (
+    <nav className="p-4 grid grid-cols-6" spacing={2}>
+      {/* Left Section */}
+      <div>
+      </div>
+      <div className="flex items-center space-x-2 col-span-2">
+        {/* Logo */}
+        <Link to="/" className="flex items-center text-white text-3xl font-bold text-black">
+          <GiShipWheel color="black" className="h-12 w-12 mr-2" />
+          MAGELLAN
+        </Link>
+      </div>
+
+      {/* Right Section */}
+      <div className="relative col-span-2 text-right">
+        <BasicMenu />
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;

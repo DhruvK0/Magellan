@@ -29,6 +29,11 @@ const TravelForm = () => {
     sports: false,
     museums: false,
     restaurants: false,
+    soft_adventure: false,
+    hard_adventure: false,
+    sightseeing: false,
+    tours: false,
+    relaxing: false,
   });
   const [endDateError, setEndDateError] = useState('');
   const [showDestinationError, setShowDestinationError] = useState(false); // New state variable
@@ -274,6 +279,76 @@ const TravelForm = () => {
                         />
                       }
                       label="Restaurants"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={activities.soft_adventure}
+                          onChange={() =>
+                            setActivities({
+                              ...activities,
+                              soft_adventure: !activities.soft_adventure,
+                            })
+                          }
+                        />
+                      }
+                      label="Soft Adventure"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={activities.hard_adventure}
+                          onChange={() =>
+                            setActivities({
+                              ...activities,
+                              hard_adventure: !activities.hard_adventure,
+                            })
+                          }
+                        />
+                      }
+                      label="Hard Adventure"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={activities.sightseeing}
+                          onChange={() =>
+                            setActivities({
+                              ...activities,
+                              sightseeing: !activities.sightseeing,
+                            })
+                          }
+                        />
+                      }
+                      label="Sightseeing"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={activities.tours}
+                          onChange={() =>
+                            setActivities({
+                              ...activities,
+                              tours: !activities.tours,
+                            })
+                          }
+                        />
+                      }
+                      label="Tours"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={activities.relaxing}
+                          onChange={() =>
+                            setActivities({
+                              ...activities,
+                              relaxing: !activities.relaxing,
+                            })
+                          }
+                        />
+                      }
+                      label="Relaxing"
                     />
                   </FormGroup>
                 </div>

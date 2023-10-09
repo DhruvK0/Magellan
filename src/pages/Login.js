@@ -36,10 +36,10 @@ const Login = () => {
   return (
     <>
       <div className="p-4 box">
-        <h2 className="mb-3">Firebase Auth Login</h2>
+        <h2 className="mb-3 text-center">Firebase Auth Login</h2>
         {error && <Alert variant="danger">{error}</Alert>}
         <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Group className="mb-3 text-center" controlId="formBasicEmail">
             <Form.Control
               type="email"
               placeholder="Email address"
@@ -47,7 +47,7 @@ const Login = () => {
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Group className="mb-3 text-center" controlId="formBasicPassword">
             <Form.Control
               type="password"
               placeholder="Password"
@@ -55,14 +55,14 @@ const Login = () => {
             />
           </Form.Group>
 
-          <div className="d-grid gap-2">
+          <div className="d-grid gap-2 text-center">
             <Button variant="primary" type="Submit">
               Log In
             </Button>
           </div>
         </Form>
         <hr />
-        <div>
+        <div className="g-btn right-20">
           <GoogleButton
             className="g-btn"
             type="dark"

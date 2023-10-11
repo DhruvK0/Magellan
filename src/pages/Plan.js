@@ -78,15 +78,16 @@ const TravelForm = () => {
     
     const payload = formatApiPayload();
     
-    axios.post('http://localhost:5000/generate_itinerary', payload)
+    axios.post('https://magellanbackend.uw.r.appspot.com/generate_itinerary', payload)
       .then((response) => {
         console.log(response.data);
         setItinerary(response.data.itinerary); // <-- Using setItinerary from context
         navigate('/ItineraryDisplay');
-        navigate('/itinerary', { state: { itinerary: response.data.itinerary } });
+        navigate('/generate', { state: { itinerary: response.data.itinerary } });
       })
       .catch((error) => {
         console.error("There was an error sending the data!", error);
+        navigate('/generate')
       });
     // try {
     //   const response = await fetch('/generate_itinerary', {

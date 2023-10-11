@@ -34,46 +34,47 @@ const Login = () => {
   };
 
   return (
-    <>
-      <div className="p-4 box">
-        <h2 className="mb-3 text-center">Firebase Auth Login</h2>
-        {error && <Alert variant="danger">{error}</Alert>}
-        <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3 text-center" controlId="formBasicEmail">
-            <Form.Control
-              type="email"
-              placeholder="Email address"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </Form.Group>
+    <div>
+      <div className="flex justify-center">
+        <div className="p-4 box rounded-md w-1/6 shadow-lg bg-slate-100">
+          <h2 className="mb-3 text-center">Firebase Auth Login</h2>
+          {error && <Alert variant="danger">{error}</Alert>}
+          <Form onSubmit={handleSubmit}>
+            <Form.Group className="mb-3 text-center ml-2 mr-2" controlId="formBasicEmail">
+              <Form.Control className="w-full "
+                type="email"
+                placeholder="Email address"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </Form.Group>
 
-          <Form.Group className="mb-3 text-center" controlId="formBasicPassword">
-            <Form.Control
-              type="password"
-              placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </Form.Group>
+            <Form.Group className="mb-3 text-center ml-2 mr-2" controlId="formBasicPassword">
+              <Form.Control className="w-full"
+                type="password"
+                placeholder="Password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Form.Group>
 
-          <div className="d-grid gap-2 text-center">
-            <Button variant="primary" type="Submit">
-              Log In
-            </Button>
-          </div>
-        </Form>
-        <hr />
-        <div className="g-btn right-20">
+            <div className="d-grid gap-2 text-center bg-blue">
+              <Button variant="primary" type="Submit">
+                Log In
+              </Button>
+            </div>
+          </Form>
+        </div>
+      </div>
+      <div className="g-btn right-20 flex justify-center mt-10">
           <GoogleButton
             className="g-btn"
             type="dark"
             onClick={handleGoogleSignIn}
           />
         </div>
-      </div>
       <div className="p-4 box mt-3 text-center">
         Don't have an account? <Link to="/signup">Sign up</Link>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -96,7 +96,7 @@ const Navbar = () => {
       </div>
       <div className="flex items-center space-x-2 col-span-2">
         {/* Logo */}
-        <Link to="/" className="flex items-center text-white text-3xl font-bold text-black">
+        <Link to="/" className="flex items-center text-3xl font-bold text-black">
           <GiShipWheel color="black" className="h-12 w-12 mr-2" />
           MAGELLAN
         </Link>

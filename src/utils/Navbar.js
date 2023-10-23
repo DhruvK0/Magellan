@@ -8,6 +8,7 @@ import { GiShipWheel } from "react-icons/gi";
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import Magellan_Logo from "../assets/Magellan.svg"
 
 export function BasicMenu() {
   const { logOut, user} = useUserAuth();
@@ -97,8 +98,8 @@ const Navbar = () => {
       <div className="flex items-center space-x-2 col-span-2">
         {/* Logo */}
         <Link to="/" className="flex items-center text-3xl font-bold text-black">
-          <GiShipWheel color="black" className="h-12 w-12 mr-2" />
-          MAGELLAN
+          <img src={Magellan_Logo} alt="Magellan" className="w-10 h-10 mr-2" />
+          <span className='mb-1'>MAGELLAN</span>
         </Link>
       </div>
 

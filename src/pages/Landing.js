@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'; // For animation
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import landingImage from '../assets/img6.jpg';
+import {ReactComponent as ProductFlow} from '../assets/ProductFlow.svg'
 
 const Landing = () => {
   let navigate = useNavigate();
@@ -26,49 +27,58 @@ const Landing = () => {
       {/* First Third */}
       <div className="min-h-screen justify-center items-center relative top-20">
         <Grid container spacing={2}>
-        {/* Empty Column before Text */}
+          {/* Empty Column before Text */}
           <Grid item xs={0} sm={2}></Grid>
           {/* Left Text Area */}
-          <Grid item xs={12} sm={2}>
-            <Typography variant="h4">Your Personalized, End-to-End, AI Travel Agent</Typography>
-            <Typography variant="body1" class='mt-4'>
-              Curate the best travel plans based on your unique preferences, with access to thousands of reviews, flight listings, hotel reservations, and more.
-            </Typography>
-            {/* Get Started Button */}
-            <div className="mt-6">
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                onClick={handleGetStarted}
-              >
-                Get Started
-              </button>
+          <Grid item xs={12} sm={3} >
+            <div className="pt-20">
+              <Typography variant="h4" class="text-left px-10 text-3xl font-bold">Your Personalized,</Typography>
+              <Typography variant="h4" class="text-left px-10 text-3xl font-bold">End-to-End,</Typography>
+              <Typography variant="h4" class="text-left px-10 text-3xl font-bold">AI Travel Agent</Typography>
+              <Typography variant="body1" class='mt-4 text-left px-10'>
+                Curate the best travel plans based on your unique preferences, with access to thousands of reviews, flight listings, hotel reservations, and more.
+              </Typography>
+              {/* Get Started Button */}
+              <div className="mt-6 mx-10 pr-20 justify-items-center align-center">
+                <button
+                    className="bg-[#189490] hover:bg-[#17585E] text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-full"
+                  onClick={handleGetStarted}
+                >
+                  Take the first step
+                </button>
+              </div>
+            </div>
+          </Grid>
+          
+          {/* Empty Column after Image */}
+          <Grid item xs={0} sm={0.5}></Grid>
+          {/* <Grid item xs={0} sm={1}></Grid> */}
+          {/* Right Image Card */}
+          <Grid item xs={12} sm={5}>
+            <div elevation={3} className='px-10'>
+              {/* Your image goes here */}
+                {/* <img src={landingImage} alt="Travel" className='object-fill'/> */}
+                <ProductFlow className="w-full h-fit align-center rounded-xl shadow-xl" />
             </div>
           </Grid>
           {/* Empty Column after Image */}
           <Grid item xs={0} sm={1}></Grid>
-          {/* Right Image Card */}
-          <Grid item xs={12} sm={5}>
-            <div elevation={3} className="bg-white rounded-lg p-4 shadow-md">
-              {/* Your image goes here */}
-                <img src={landingImage} alt="Travel" className='object-fill'/>
-            </div>
-          </Grid>
-          {/* Empty Column after Image */}
-          <Grid item xs={0} sm={2}></Grid>
+          
+          {/* <Grid item xs={0} sm={2}></Grid> */}
         </Grid>
         {/* Learn More */}
+
 
       </div>
 
       {/* Second Third */}
-      <div id="second-section" className="min-h-screen flex flex-col justify-center items-center bg-green-200">
+      {/* <div id="second-section" className="min-h-screen flex flex-col justify-center items-center bg-green-200">
         <Typography variant="h6">
           It's never taken so few clicks to make so many memories
         </Typography>
         <Button component={Link} to="/plan" variant="contained" color="primary" >
           Get Started
         </Button>
-        {/* Learn More Arrow */}
         <motion.div
           className="absolute bottom-4 left-1/2 transform -translate-x-1/2 cursor-pointer flex flex-col items-center"
         //   whileHover={{ y: 5, x: 0, transition: { duration: 0.2 } }}
@@ -77,10 +87,10 @@ const Landing = () => {
           <span className="text-gray-700 text-sm block mb-1">Learn More</span>
           <FontAwesomeIcon icon={faChevronDown} className="text-gray-700 text-4xl" />
         </motion.div>
-      </div>
+      </div> */}
 
       {/* Third Third */}
-      <div id="third-section" className="min-h-screen flex flex-col justify-center items-center bg-yellow-200">
+      {/* <div id="third-section" className="min-h-screen flex flex-col justify-center items-center bg-yellow-200">
         <Grid container spacing={2}>
           <Grid item xs={12} sm={4}>
             <Paper elevation={3}>
@@ -101,7 +111,7 @@ const Landing = () => {
             </Paper>
           </Grid>
         </Grid>
-      </div>
+      </div> */}
     </div>
   );
 };

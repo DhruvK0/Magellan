@@ -91,20 +91,20 @@ export function BasicMenu() {
 
 const Navbar = () => {
   return (
-    <nav className="p-4 grid grid-cols-6" spacing={2}>
+    <nav className="p-4 grid grid-cols-12" spacing={2}>
       {/* Left Section */}
       <div>
       </div>
-      <div className="flex items-center space-x-2 col-span-2">
+      <div className="flex items-center space-x-2 col-span-8">
         {/* Logo */}
         <Link to="/" className="flex items-center text-3xl font-bold text-black">
-          <img src={Magellan_Logo} alt="Magellan" className="w-10 h-10 mr-2" />
+          <img src={Magellan_Logo} alt="Magellan" className="w-14 h-14 mr-3" />
           <span className='mb-1'>MAGELLAN</span>
         </Link>
       </div>
 
       {/* Right Section */}
-      <div className="relative col-span-2 text-right">
+      <div className="relative col-span-2 text-right pt-1">
         <BasicMenu />
       </div>
     </nav>

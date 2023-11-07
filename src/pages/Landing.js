@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import landingImage from '../assets/img6.jpg';
 import {ReactComponent as ProductFlow} from '../assets/ProductFlow.svg'
+import WaitlistForm from './Waitlist'
 
 const Landing = () => {
   let navigate = useNavigate();
@@ -40,12 +41,13 @@ const Landing = () => {
               </Typography>
               {/* Get Started Button */}
               <div className="mt-6 mx-10 pr-20 justify-items-center align-center">
-                <button
+                <WaitlistForm />
+                {/* <button
                     className="bg-[#189490] hover:bg-[#17585E] text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-full"
                   onClick={handleGetStarted}
                 >
                   Take the first step
-                </button>
+                </button> */}
               </div>
             </div>
           </Grid>
@@ -67,51 +69,7 @@ const Landing = () => {
           {/* <Grid item xs={0} sm={2}></Grid> */}
         </Grid>
         {/* Learn More */}
-
-
       </div>
-
-      {/* Second Third */}
-      {/* <div id="second-section" className="min-h-screen flex flex-col justify-center items-center bg-green-200">
-        <Typography variant="h6">
-          It's never taken so few clicks to make so many memories
-        </Typography>
-        <Button component={Link} to="/plan" variant="contained" color="primary" >
-          Get Started
-        </Button>
-        <motion.div
-          className="absolute bottom-4 left-1/2 transform -translate-x-1/2 cursor-pointer flex flex-col items-center"
-        //   whileHover={{ y: 5, x: 0, transition: { duration: 0.2 } }}
-          onClick={scrollToSections}
-        >
-          <span className="text-gray-700 text-sm block mb-1">Learn More</span>
-          <FontAwesomeIcon icon={faChevronDown} className="text-gray-700 text-4xl" />
-        </motion.div>
-      </div> */}
-
-      {/* Third Third */}
-      {/* <div id="third-section" className="min-h-screen flex flex-col justify-center items-center bg-yellow-200">
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={4}>
-            <Paper elevation={3}>
-              <img src="customer-reviews-placeholder-url" alt="Customer Reviews" />
-              <Typography variant="h6">Customer Reviews</Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <Paper elevation={3}>
-              <img src="hotel-flights-placeholder-url" alt="Hotel and Flights" />
-              <Typography variant="h6">Hotel and Flights</Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <Paper elevation={3}>
-              <img src="exciting-activities-placeholder-url" alt="Exciting Activities" />
-              <Typography variant="h6">Exciting Activities</Typography>
-            </Paper>
-          </Grid>
-        </Grid>
-      </div> */}
     </div>
   );
 };

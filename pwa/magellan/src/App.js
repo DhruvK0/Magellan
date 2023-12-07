@@ -1,25 +1,38 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Landing from "./pages/Landing";
+import TravelForm from "./pages/Plan";
+import ItineraryTimeline from "./pages/Generate";
+import ProtectedRoute from "./utils/ProtectedRoute";
+import { UserAuthContextProvider } from "./utils/AuthContext";
+import NavBar from "./utils/Navbar";
+import { ItineraryProvider } from "./utils/ItineraryContext";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ItineraryProvider>
+      <UserAuthContextProvider>
+            <NavBar />
+            <Routes>
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/plan" element={<ProtectedRoute><TravelForm/></ProtectedRoute>} />
+              <Route path="/generate" element={<ProtectedRoute><ItineraryTimeline/></ProtectedRoute>} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/" element={<Landing/>} />
+            </Routes>
+          </UserAuthContextProvider>
+    </ItineraryProvider>
   );
 }
 

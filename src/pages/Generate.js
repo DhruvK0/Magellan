@@ -14,6 +14,9 @@ import SportsBaseballIcon from '@mui/icons-material/SportsBaseball';
 import FastfoodIcon from '@mui/icons-material/Fastfood';
 import NatureIcon from '@mui/icons-material/Nature';
 import LocalBarIcon from '@mui/icons-material/LocalBar';
+import { useLocation } from 'react-router-dom';
+import { getHotelList } from './Planning/AmadeusQuery';
+import { useEffect, useState } from 'react';
 
 const itineraryData = {
   "itinerary": [
@@ -161,12 +164,29 @@ const activityIcons = {
 
 const ItineraryTimeline = () => {
   const itinerary = itineraryData.itinerary;
+  const location = useLocation();
+
+  const payload = location.state.itinerary;
+
+  const [hotelList, setHotelList] = useState([]);
+
+  useEffect(() => {
+    const getHotels = async () => {
+      const hotels = await getHotelList(payload);
+      setHotelList(hotels);
+    };
+    getHotels();
+  }, [payload]);
 
   return (
     <div className="p-4">
         {/* Title */}
       <Typography variant="h4" className="text-center mb-10">
         Your Trip
+      </Typography>
+
+      <Typography variant="h5" className="text-center mb-10">
+        {hotelList ? hotelList : "Loading..."}
       </Typography>
 
       {itinerary.map((day, index) => (

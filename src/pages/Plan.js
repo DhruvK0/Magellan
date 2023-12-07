@@ -42,7 +42,7 @@ const TravelForm = () => {
 
   const formatApiPayload = () => {
     return {
-      destination: destinations[0], // Assuming first destination from your destinations array
+      destinations: destinations[0], // Assuming first destination from your destinations array
       activities: Object.keys(activities).filter((activity) => activities[activity]),
       num_travelers: numberOfPeople,
       dates: {
@@ -77,6 +77,8 @@ const TravelForm = () => {
     event.preventDefault(); // Prevent the default form submission behavior
     
     const payload = formatApiPayload();
+
+    // navigate('/generate', { state: { itinerary: payload } })
     
     axios.post('https://magellanbackend.uw.r.appspot.com/generate_itinerary', payload)
       .then((response) => {

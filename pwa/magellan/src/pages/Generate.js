@@ -166,17 +166,17 @@ const ItineraryTimeline = () => {
   const itinerary = itineraryData.itinerary;
   const location = useLocation();
 
-  const payload = location.state.itinerary;
+  //const payload = location.state.itinerary;
 
   const [hotelList, setHotelList] = useState([]);
 
-  useEffect(() => {
-    const getHotels = async () => {
-      const hotels = await getHotelList(payload);
-      setHotelList(hotels);
-    };
-    getHotels();
-  }, [payload]);
+  // useEffect(() => {
+  //   const getHotels = async () => {
+  //     const hotels = await getHotelList(payload);
+  //     setHotelList(hotels);
+  //   };
+  //   getHotels();
+  // }, [payload]);
 
   return (
     <div className="p-4">

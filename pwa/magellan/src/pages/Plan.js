@@ -26,6 +26,7 @@ const TravelForm = () => {
   const [endDate, setEndDate] = useState('');
   const [numberOfPeople, setNumberOfPeople] = useState(1);
   const [dietaryRestrictions, setDietaryRestrictions] = useState('');
+  const [textPreferences, setTextPreferences] = useState('');
   const [activities, setActivities] = useState({
     sports: false,
     museums: false,
@@ -50,6 +51,7 @@ const TravelForm = () => {
         end_date: endDate,
       },
       diet: dietaryRestrictions,
+      text_preferences: textPreferences,
     };
   };
   
@@ -281,6 +283,13 @@ const TravelForm = () => {
                     fullWidth
                     value={dietaryRestrictions}
                     onChange={(e) => setDietaryRestrictions(e.target.value)}
+                  />
+                  <TextField
+                    label="Text Preferences"
+                    variant="outlined"
+                    fullWidth
+                    value={textPreferences}
+                    onChange={(e) => setTextPreferences(e.target.value)}
                   />
                   <FormGroup>
                     <Typography variant="subtitle1">Select Activities</Typography>

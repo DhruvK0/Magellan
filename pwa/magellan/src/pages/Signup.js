@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Form, Alert } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import { useUserAuth } from "../utils/AuthContext";
+import { ProfileCreate } from "../database_functions/Profile";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -15,7 +16,8 @@ const Signup = () => {
     e.preventDefault();
     setError("");
     try {
-      await signUp(email, password);
+      const signRef = await signUp(email, password);
+      await ProfileCreate(signRef.user.email, signRef.user.uid);
       navigate("/");
     } catch (err) {
       setError(err.message);

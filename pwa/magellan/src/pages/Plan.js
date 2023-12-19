@@ -15,6 +15,9 @@ import exportUserData from './exportUserData';
 import { useNavigate } from 'react-router-dom';
 import { useItinerary } from '../utils/ItineraryContext';
 import axios from 'axios';
+import { useUserAuth } from '../utils/AuthContext';
+import { SessionCreate } from '../database_functions/Sessions';
+
 
 const steps = ['Destinations', 'Travel Details', 'Preferences'];
 
@@ -40,6 +43,8 @@ const TravelForm = () => {
   const [endDateError, setEndDateError] = useState('');
   const [showDestinationError, setShowDestinationError] = useState(false); // New state variable
   const navigate = useNavigate();
+  //get the uid from the user
+  const uid = useUserAuth().user.uid;
 
   const formatApiPayload = () => {
     return {
@@ -77,22 +82,24 @@ const TravelForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault(); // Prevent the default form submission behavior
-    
     const payload = formatApiPayload();
+    const session_id = await SessionCreate(uid, payload);
+    navigate('/generate', { state: { session: session_id } })
 
     // navigate('/generate', { state: { itinerary: payload } })
     
-    axios.post('https://magellanbackend.uw.r.appspot.com/generate_itinerary', payload)
-      .then((response) => {
-        console.log(response.data);
-        setItinerary(response.data.itinerary); // <-- Using setItinerary from context
-        navigate('/ItineraryDisplay');
-        navigate('/generate', { state: { itinerary: response.data.itinerary } });
-      })
-      .catch((error) => {
-        console.error("There was an error sending the data!", error);
-        navigate('/generate')
-      });
+    // axios.post('https://magellanbackend.uw.r.appspot.com/generate_itinerary', payload)
+    //   .then((response) => {
+    //     console.log(response.data);
+    //     setItinerary(response.data.itinerary); // <-- Using setItinerary from context
+    //     navigate('/ItineraryDisplay');
+    //     navigate('/generate', { state: { itinerary: response.data.itinerary } });
+    //   })
+    //   .catch((error) => {
+    //     console.error("There was an error sending the data!", error);
+    //     navigate('/generate')
+    //   });
+
     // try {
     //   const response = await fetch('/generate_itinerary', {
     //     method: 'POST',
@@ -284,13 +291,13 @@ const TravelForm = () => {
                     value={dietaryRestrictions}
                     onChange={(e) => setDietaryRestrictions(e.target.value)}
                   />
-                  <TextField
+                  {/* <TextField
                     label="Text Preferences"
                     variant="outlined"
                     fullWidth
                     value={textPreferences}
                     onChange={(e) => setTextPreferences(e.target.value)}
-                  />
+                  /> */}
                   <FormGroup>
                     <Typography variant="subtitle1">Select Activities</Typography>
                     <FormControlLabel

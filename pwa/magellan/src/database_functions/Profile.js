@@ -17,6 +17,8 @@ export async function ProfileCreate(email, user_id) {
             address: "",
             dob: "",
             friends: [],
+            session_host_list: [],
+            session_invitee_list: [],
         });
         console.log("Profile Successfully Created");
     }

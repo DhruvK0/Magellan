@@ -84,7 +84,7 @@ const TravelForm = () => {
     event.preventDefault(); // Prevent the default form submission behavior
     const payload = formatApiPayload();
     const session_id = await SessionCreate(uid, payload);
-    navigate('/generate', { state: { session: session_id } })
+    navigate(`/trips/${session_id}`, { state: { session: session_id } })
 
     // navigate('/generate', { state: { itinerary: payload } })
     

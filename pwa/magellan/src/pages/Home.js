@@ -40,10 +40,10 @@ const TripCard = ({destination, id}) => {
 
   //create a card that displays the destination and when clicked, navigates to the route /trips/:id and has rounded corners
   return (  
-    <div onClick={handleTripClick} className="p-4 box mt-3 text-center">
+    <div onClick={handleTripClick} className="bg-slate-100 p-4 box mt-3 text-center mb-8">
       { Array.isArray(destination) ? destination.map((item, index) => (
         <div key={index} className="mb-4">
-          <p className="text-gray-600">{item}</p>
+          <p>{item}</p>
         </div>
       )) : <p className="text-gray-600">{destination}</p> }
       
@@ -99,27 +99,11 @@ function ProfileLoader({ profile }) {
   useEffect(() => {
     const getInviteeSessions = async () => {
       const sessions = await getSessions(profile.session_invitee_list);
-      console.log("sessions: ", sessions);
       setInviteeSessions(sessions);
     }
     getInviteeSessions();
   }, []);
 
-  // const hostSessions = async () => { await getSessions(profile.session_host_list)}
-  // const inviteeSessions = getSessions(profile.session_invitee_list);
-  
-  inviteeSessions ? console.log("invitee: ", inviteeSessions) : console.log("inviteeSessions is null");
-
-  const leftColumnData = [
-    { label: 'Occupation', value: 'Web Developer' },
-    { label: 'Location', value: 'New York' },
-  ];
-
-  const rightColumnData = [
-    { label: 'Skill', value: 'React, JavaScript' },
-    { label: 'Email', value: 'john@example.com' },
-  ];
-  
   return (
 
     <div className="min-h-screen flex justify-center">
@@ -128,10 +112,20 @@ function ProfileLoader({ profile }) {
         <div className="mb-8">
           <h2 className="text-3xl font-bold mb-6">{user.email}</h2>
           <img
-            src="https://placekitten.com/800/400"
+            src="https://i.ibb.co/3yrHZTS/daniela-cuevas-t7-Yycg-Ao-VSw-unsplash.jpg"
             alt="Profile Picture"
             className="w-full h-64 object-cover rounded-md shadow-lg"
           />
+          <div className="p-4 box mt-3 text-center">
+            <Button variant="primary" onClick={handleLogout}>
+              Log out
+            </Button>
+          </div>
+          <div className="p-4 box mt-3 text-center">
+            <Button variant="primary" onClick={handlePlan}>
+              Plan a Trip
+            </Button>
+          </div>
         </div>
 
         {/* Bottom Half - Two Column Layout */}
@@ -141,9 +135,8 @@ function ProfileLoader({ profile }) {
             <div>
               <h1 className="text-3xl font-bold mb-6">Hosted Sessions</h1>
                 {hostSessions ? hostSessions.map((item, index) => (
-                          <div key={index} className="mb-4">
-                            <p className="text-gray-600">{item.label}: {item.value}</p>
-                          </div>
+                  hostSessions.length === 0 ? <div>No Hosted Sessions</div> :
+                  <TripCard key={index} destination={item.prefs.host_id.destinations} id={item.session_id} />
                 )) : <div>loading...</div>}
             </div>
           </Suspense>
@@ -152,38 +145,14 @@ function ProfileLoader({ profile }) {
           <div>
             <h1 className="text-3xl font-bold mb-6">Invitee Sessions</h1>
               {inviteeSessions ? inviteeSessions.map((item, index) => (
-                        <TripCard key={index} destination={item.label} id={item.session_id} />
+                //if the length is zero, display a message saying that there are no invitee sessions
+                inviteeSessions.length === 0 ? <div>No Invitee Sessions</div> : 
+                <TripCard key={index} destination={item.prefs.destinations} id={item.session_id} />
               )) : <div>loading...</div>}
           </div>
         </div>
       </div>
     </div>
-
-
-
-    // <>
-    //   <div className="p-4 box mt-3 text-center">
-    //     Hello Welcome <br />
-    //     {user && user.email}
-    //   </div>
-
-    //   <div>
-
-    //   </div>
-    //   <div  className="p-4 box mt-3 text-center">
-    //     {profile.session_host_list[0]}
-    //   </div>
-    //   <div className="p-4 box mt-3 text-center">
-    //     <Button variant="primary" onClick={handleLogout}>
-    //       Log out
-    //     </Button>
-    //   </div>
-    //   <div className="p-4 box mt-3 text-center">
-    //     <Button variant="primary" onClick={handlePlan}>
-    //       Plan a Trip
-    //     </Button>
-    //   </div>
-    // </>
   );
 
 }

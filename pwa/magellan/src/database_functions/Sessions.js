@@ -8,8 +8,11 @@ export async function SessionCreate(host_id, data) {
         host_id: host_id,
         start_date: data.dates.start_date,
         end_date: data.dates.end_date,
+        text_preferences: null,
+        vectorized_preferences: null,
         invitees: [],
         prefs: {host_id: data},
+        activities: [],
     });
     console.log("Session Created", docRef.id);
 
@@ -33,4 +36,15 @@ export async function SessionCreate(host_id, data) {
 
 async function Session_Add(host_id, session_id) {
 
+}
+
+export async function SessionGet(session_id) {
+    const docSnap = await getDoc(doc(db, "sessions", session_id));
+    if (docSnap.exists()) {
+        return docSnap.data();
+    } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+        return null;
+    }
 }

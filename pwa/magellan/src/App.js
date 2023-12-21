@@ -10,6 +10,7 @@ import ProtectedRoute from "./utils/ProtectedRoute";
 import { UserAuthContextProvider } from "./utils/AuthContext";
 import NavBar from "./utils/Navbar";
 import { ItineraryProvider } from "./utils/ItineraryContext";
+import { ActivitiesView } from "./pages/Activities";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/" element={<Landing/>} />
+              <Route path="/trips/:id" element={<ActivitiesView/>} />
             </Routes>
           </UserAuthContextProvider>
     </ItineraryProvider>

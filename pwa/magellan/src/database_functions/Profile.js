@@ -24,6 +24,17 @@ export async function ProfileCreate(email, user_id) {
     }
 }
 
-async function Profile_Update(user_id, data) {
+async function ProfileUpdate(user_id, data) {
     
+}
+
+export async function ProfileGet(user_id) {
+    const docSnap = await getDoc(doc(db, "profiles", user_id));
+    if (docSnap.exists()) {
+        return docSnap.data();
+    } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+        return null;
+    }
 }

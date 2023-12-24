@@ -1,8 +1,25 @@
 import React from 'react';
 // import { View, Text, StyleSheet, FlatList, Dimensions } from 'react-native';
 import { useLocation } from 'react-router-dom';
+import { getFunctions, httpsCallable } from 'firebase/functions';
+import { useState } from 'react';
 
 // const { width } = Dimensions.get('window');
+
+const functions = getFunctions();
+const genProfile = httpsCallable(functions, 'generate_profile');
+
+genProfile({ trip_id: "7XYMrtfBAU7I7ZbFxJit" }).then((result) => {
+  const data = result.data;
+  console.log(data);
+}).catch((error) => {
+  const code = error.code;
+  const message = error.message;
+  const details = error.details;
+  console.log("Code: ", code)
+  console.log('Message: ', message);
+  console.log("Details: ", details);
+})
 
 const data = [
   { id: '1', title: 'Card 1' },
@@ -11,10 +28,12 @@ const data = [
   // Add more data as needed
 ];
 
+
 const numColumns = 2;
 
 export const ActivitiesView = () => {
   //get the pushed id from the navigation and display it
+  const [data, setData] = useState(null);
   const location = useLocation();
   const session_id = location.pathname.split('/')[2] 
 

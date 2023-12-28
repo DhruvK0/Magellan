@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { useState } from 'react';
 import axios from 'axios';
+import Chatbot from './Chatbot';
 
 const functions = getFunctions();
 const genProfile = httpsCallable(functions, 'generate_profile');
@@ -103,9 +104,16 @@ export const ActivitiesView = () => {
     //   <p>Session ID: {session_id}</p>
       
     // </div>
-    <div className="container mx-auto mt-8">
+    <div>
+      <div className="container mx-auto mt-8">
         <EventCard {...eventData} />
       </div>
+
+      <Chatbot />
+      
+
+    </div>
+    
     // <View style={styles.container}>
     //   <FlatList
     //     data={data}

@@ -175,33 +175,7 @@ export const ActivitiesView = () => {
     console.log("this is details", activityDetails)
     }
   , [sessionActivities])
-    //console.log(sessionActivities[0])
-    // //call the /get_activity endpoint for each activity in the sessionActivities list and add the returned json object to the sessionActivities list
-    // for (const activity in sessionActivities) {
-    //   getProductInfo({ id: activity }, {
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //     }
-    //   }).then((result) => {
-    //     sessionActivities.push(result.data);
-    //   }).catch((error) => {
-    //     const code = error.code;
-    //     const message = error.message;
-    //     const details = error.details;
-    //     console.log("Code: ", code)
-    //     console.log('Message: ', message);
-    //     console.log("Details: ", details);
-    //   })
-    // }
-  // }
 
-
-  // axios.get('https://us-central1-magellan-62c66.cloudfunctions.net/generate_profile', {
-  //   trip_id: '7XYMrtfBAU7I7ZbFxJit'}, {headers: {
-  //   'Content-Type': 'application/json'
-  // }}).then((response) => {
-  //   console.log(response)
-  // })
 
   // check if there is already an activites list for this session, if not call the /get_activity_list endpoint and add that to the session
 
@@ -223,13 +197,6 @@ export const ActivitiesView = () => {
 
 
   return (
-    // <div>
-    //   <h1>Activities View</h1>
-    //   <p>Session ID: {session_id}</p>
-      
-    // </div>
-
-    //
       sessionActivities ? 
       <div>
         { sessionActivities.map((item, index) => (
@@ -244,33 +211,5 @@ export const ActivitiesView = () => {
         </div>
         <Chatbot />
       </div>
-
-
-
-    
-    // <View style={styles.container}>
-    //   <FlatList
-    //     data={data}
-    //     renderItem={renderCard}
-    //     keyExtractor={(item) => item.id}
-    //     numColumns={numColumns}
-    //   />
-    // </View>
   );
 };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     padding: 8,
-//   },
-//   card: {
-//     flex: 1,
-//     margin: 8,
-//     padding: 16,
-//     backgroundColor: 'lightblue',
-//     borderRadius: 8,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });

@@ -99,6 +99,7 @@ export const ActivitiesView = () => {
             const data = docSnap.data()
             if (data.text_preferences) {
               console.log("profile exists")
+              console.log(trip_id)
               setSessionProfile(data.text_preferences);
               getActivityList({ trip_id: trip_id }, {
                   headers: {
@@ -106,6 +107,7 @@ export const ActivitiesView = () => {
                   }
                 }).then((result) => {
                   setSessionActivities(result.data);
+
                 }
                 ).catch((error) => {
                   const code = error.code;
@@ -168,32 +170,34 @@ export const ActivitiesView = () => {
   }
 
   useEffect(() => {
-    if (sessionActivities) {
-      sessionActivities.map( async (activity) => {
-        // get doc from the activity_info collection with the id of the activity
-        // set the activity_details to the returned json object
-        // add the activity_details to the activity object
-
-        const docRef = doc(db, "activity_info", activity)
-        const docSnap = await getDoc(docRef)
-
+    const fetchActivityDetails = async () => {
+      let details = {};
+      for (const activity of sessionActivities) {
+        const docRef = doc(db, "activity_info", activity);
+        const docSnap = await getDoc(docRef);
+  
         if (docSnap.exists()) {
-          const data = docSnap.data()
-          //set to an object with the data as the value and the activity id as the key
-          setActivityDetails(activityDetails[activity] = filterActivity(data))
+          details[activity] = filterActivity(docSnap.data());
         } else {
-          console.log("No such document!")
+          console.log("No such document for activity:", activity);
         }
-      })
-    } 
-    setIsLoading(false);}
-  , [sessionActivities])
+      }
+  
+      setActivityDetails(details);
+      setIsLoading(false);
+    };
+  
+    if (sessionActivities.length > 0) {
+      fetchActivityDetails();
+    }
+  }, [sessionActivities]);
+  
 
   useEffect(() => {
     
     // check if every value in sessionActivities is in they keys of activityDetails, if not, set isLoading to true, if so, set isLoading to false
     if (sessionActivities) {
-      sessionActivities.every((item) => activityDetails[item]) ? setIsLoading(false) : setIsLoading(true)
+      sessionActivities.every((item) => activityDetails[item]) ? setIsLoading(true) : setIsLoading(false)
     }
   }, [sessionActivities, activityDetails])
 
@@ -204,8 +208,6 @@ export const ActivitiesView = () => {
   // using the returned activities, for each one call the /get_activity endpoint and parse each of the json objects into a card
   
   //create a const that parses each of the activities into a json object that can be used to create a card
-  
-
 
   if (!isLoading) {
     return (  
@@ -223,12 +225,7 @@ export const ActivitiesView = () => {
       <div>
         { sessionActivities.map((item, index) => (
           
-          <div>
-            <p>{item}</p>
-            <p>{activityDetails[item].title}</p>
-          </div>
-
-          // <EventCard key={index} {...activityDetails[item]} />
+          <EventCard key={index} {...activityDetails[item]} />
         )) } 
         <Chatbot />
       </div> :   
@@ -248,6 +245,7 @@ export const ActivitiesView = () => {
       </div>
     );
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   // return (
   //     sessionActivities ? 

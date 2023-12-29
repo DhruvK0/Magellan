@@ -153,6 +153,18 @@ export const ActivitiesView = () => {
     getProfile();
   }, [])
 
+  function filterActivity( activity ) {
+    const activityData = {
+      title: activity.title ? activity.title : 'No Title',
+      image: activity.images ? activity.images[0].variants[0].url ? activity.images[0].variants[0].url : "https://example.com/sample-image.jpg" : "no image",
+      rating: activity.reviews? activity.reviews.combinedAverageRating ? activity.reviews.combinedAverageRating : 0 : 0,
+      link: activity.productUrl ? activity.productUrl : "https://example.com/sample-event",
+      price: activity.ticketInfo ? activity.ticketInfo.ticketTypeDescription ? activity.ticketInfo.ticketTypeDescription : "No Ticket Description" : "No Ticket Description",
+      description: activity.description ? activity.description : "No Description",
+    };
+    return activityData;
+  }
+
   useEffect(() => {
     if (sessionActivities) {
       sessionActivities.map( async (activity) => {
@@ -166,7 +178,7 @@ export const ActivitiesView = () => {
         if (docSnap.exists()) {
           const data = docSnap.data()
           //set to an object with the data as the value and the activity id as the key
-          setActivityDetails(activityDetails[activity] = data)
+          setActivityDetails(activityDetails[activity] = filterActivity(data))
         } else {
           console.log("No such document!")
         }
@@ -182,17 +194,7 @@ export const ActivitiesView = () => {
   // using the returned activities, for each one call the /get_activity endpoint and parse each of the json objects into a card
   
   //create a const that parses each of the activities into a json object that can be used to create a card
-  function filterActivity( activity ) {
-    const activityData = {
-      title: activity.title ? activity.title : 'No Title',
-      image: activity.images ? activity.images[0].variants[0].url ? activity.images[0].variants[0].url : "https://example.com/sample-image.jpg" : "no image",
-      rating: activity.reviews? activity.reviews.combinedAverageRating ? activity.reviews.combinedAverageRating : 0 : 0,
-      link: activity.productUrl ? activity.productUrl : "https://example.com/sample-event",
-      price: activity.ticketInfo ? activity.ticketInfo.ticketTypeDescription ? activity.ticketInfo.ticketTypeDescription : "No Ticket Description" : "No Ticket Description",
-      description: activity.description ? activity.description : "No Description",
-    };
-    return activityData;
-  }
+  
 
 
 
@@ -200,7 +202,7 @@ export const ActivitiesView = () => {
       sessionActivities ? 
       <div>
         { sessionActivities.map((item, index) => (
-          item ? <EventCard key={index} {...filterActivity(item)} /> : <div></div>
+          item ? <EventCard key={index} {...item} /> : <div></div>
         )) } 
         <Chatbot />
       </div>  :    

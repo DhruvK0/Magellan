@@ -78,8 +78,10 @@ const eventData = {
 export const ActivitiesView = () => {
   //get the pushed id from the navigation and display it
   const [sessionProfile, setSessionProfile] = useState(null);
-  const [sessionActivities, setSessionActivities] = useState(null);
+  const [sessionActivities, setSessionActivities] = useState([]);
   const [activityDetails, setActivityDetails] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+
   const location = useLocation();
   const trip_id = location.pathname.split('/')[2]
   
@@ -183,10 +185,18 @@ export const ActivitiesView = () => {
           console.log("No such document!")
         }
       })
-    }
-    console.log("this is details", activityDetails)
-    }
+    } 
+    setIsLoading(false);}
   , [sessionActivities])
+
+  useEffect(() => {
+    
+    // check if every value in sessionActivities is in they keys of activityDetails, if not, set isLoading to true, if so, set isLoading to false
+    if (sessionActivities) {
+      sessionActivities.every((item) => activityDetails[item]) ? setIsLoading(false) : setIsLoading(true)
+    }
+  }, [sessionActivities, activityDetails])
+
 
 
   // check if there is already an activites list for this session, if not call the /get_activity_list endpoint and add that to the session
@@ -197,15 +207,38 @@ export const ActivitiesView = () => {
   
 
 
+  if (!isLoading) {
+    return (  
+    <div>
+      Loading
+    </div>
+  )
+  }
 
   return (
       sessionActivities ? 
+      // check if every value in the sessionativities list has a corresponding value in the activityDetails list, if not, call the /get_activity endpoint and add that to the activityDetails list
+
+      activityDetails ?
       <div>
         { sessionActivities.map((item, index) => (
-          item ? <EventCard key={index} {...item} /> : <div></div>
+          
+          <div>
+            <p>{item}</p>
+            <p>{activityDetails[item].title}</p>
+          </div>
+
+          // <EventCard key={index} {...activityDetails[item]} />
         )) } 
         <Chatbot />
-      </div>  :    
+      </div> :   
+      
+      <div>
+        <div className="container mx-auto mt-8">
+          <EventCard {...eventData} />
+        </div>
+        <Chatbot />
+      </div> :
 
       <div>
         <div className="container mx-auto mt-8">
@@ -213,5 +246,39 @@ export const ActivitiesView = () => {
         </div>
         <Chatbot />
       </div>
-  );
+    );
+
+  
+  // return (
+  //     sessionActivities ? 
+  //     // check if every value in the sessionativities list has a corresponding value in the activityDetails list, if not, call the /get_activity endpoint and add that to the activityDetails list
+
+  //     sessionActivities.every((item) => activityDetails[item]) ?
+  //     <div>
+  //       { sessionActivities.map((item, index) => (
+  //         activityDetails[item] ?
+  //         <div>
+  //           <p>{item}</p>
+  //           <p>{activityDetails[item]}</p>
+  //         </div> : <div></div>
+
+  //         // <EventCard key={index} {...activityDetails[item]} />
+  //       )) } 
+  //       <Chatbot />
+  //     </div> :   
+      
+  //     <div>
+  //       <div className="container mx-auto mt-8">
+  //         <EventCard {...eventData} />
+  //       </div>
+  //       <Chatbot />
+  //     </div> :
+
+  //     <div>
+  //       <div className="container mx-auto mt-8">
+  //         <EventCard {...eventData} />
+  //       </div>
+  //       <Chatbot />
+  //     </div>
+  // );
 };

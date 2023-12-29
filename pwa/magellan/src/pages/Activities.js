@@ -7,6 +7,7 @@ import axios from 'axios';
 import Chatbot from './Chatbot';
 import { db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
+import { act } from 'react-dom/test-utils';
 
 const functions = getFunctions();
 const genProfile = httpsCallable(functions, 'generate_profile');
@@ -78,7 +79,7 @@ export const ActivitiesView = () => {
   //get the pushed id from the navigation and display it
   const [sessionProfile, setSessionProfile] = useState(null);
   const [sessionActivities, setSessionActivities] = useState(null);
-  const [activityDetails, setActivityDetails] = useState(null);
+  const [activityDetails, setActivityDetails] = useState({});
   const location = useLocation();
   const trip_id = location.pathname.split('/')[2]
   
@@ -150,27 +151,49 @@ export const ActivitiesView = () => {
         }
     }
     getProfile();
-  })
+  }, [])
 
-  if (sessionActivities) {
-    //call the /get_activity endpoint for each activity in the sessionActivities list and add the returned json object to the sessionActivities list
-    for (const activity in sessionActivities) {
-      getProductInfo({ id: activity }, {
-        headers: {
-          'Content-Type': 'application/json'
+  useEffect(() => {
+    if (sessionActivities) {
+      sessionActivities.map( async (activity) => {
+        // get doc from the activity_info collection with the id of the activity
+        // set the activity_details to the returned json object
+        // add the activity_details to the activity object
+
+        const docRef = doc(db, "activity_info", activity)
+        const docSnap = await getDoc(docRef)
+
+        if (docSnap.exists()) {
+          const data = docSnap.data()
+          //set to an object with the data as the value and the activity id as the key
+          setActivityDetails(activityDetails[activity] = data)
+        } else {
+          console.log("No such document!")
         }
-      }).then((result) => {
-        sessionActivities.push(result.data);
-      }).catch((error) => {
-        const code = error.code;
-        const message = error.message;
-        const details = error.details;
-        console.log("Code: ", code)
-        console.log('Message: ', message);
-        console.log("Details: ", details);
       })
     }
-  }
+    console.log("this is details", activityDetails)
+    }
+  , [sessionActivities])
+    //console.log(sessionActivities[0])
+    // //call the /get_activity endpoint for each activity in the sessionActivities list and add the returned json object to the sessionActivities list
+    // for (const activity in sessionActivities) {
+    //   getProductInfo({ id: activity }, {
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //     }
+    //   }).then((result) => {
+    //     sessionActivities.push(result.data);
+    //   }).catch((error) => {
+    //     const code = error.code;
+    //     const message = error.message;
+    //     const details = error.details;
+    //     console.log("Code: ", code)
+    //     console.log('Message: ', message);
+    //     console.log("Details: ", details);
+    //   })
+    // }
+  // }
 
 
   // axios.get('https://us-central1-magellan-62c66.cloudfunctions.net/generate_profile', {
@@ -184,6 +207,20 @@ export const ActivitiesView = () => {
 
   // using the returned activities, for each one call the /get_activity endpoint and parse each of the json objects into a card
   
+  //create a const that parses each of the activities into a json object that can be used to create a card
+  function filterActivity( activity ) {
+    const activityData = {
+      title: activity.title ? activity.title : 'No Title',
+      image: activity.images ? activity.images[0].variants[0].url ? activity.images[0].variants[0].url : "https://example.com/sample-image.jpg" : "no image",
+      rating: activity.reviews? activity.reviews.combinedAverageRating ? activity.reviews.combinedAverageRating : 0 : 0,
+      link: activity.productUrl ? activity.productUrl : "https://example.com/sample-event",
+      price: activity.ticketInfo ? activity.ticketInfo.ticketTypeDescription ? activity.ticketInfo.ticketTypeDescription : "No Ticket Description" : "No Ticket Description",
+      description: activity.description ? activity.description : "No Description",
+    };
+    return activityData;
+  }
+
+
 
   return (
     // <div>
@@ -191,18 +228,22 @@ export const ActivitiesView = () => {
     //   <p>Session ID: {session_id}</p>
       
     // </div>
-    
-      sessionActivities ? sessionActivities.map((item, index) => (
-        <EventCard key={index} {...item} />
-      )) :    
-       <div>
-      <div className="container mx-auto mt-8">
-        <EventCard {...eventData} />
-      </div>
-      
-      <Chatbot />
 
-    </div>
+    //
+      sessionActivities ? 
+      <div>
+        { sessionActivities.map((item, index) => (
+          item ? <EventCard key={index} {...filterActivity(item)} /> : <div></div>
+        )) } 
+        <Chatbot />
+      </div>  :    
+
+      <div>
+        <div className="container mx-auto mt-8">
+          <EventCard {...eventData} />
+        </div>
+        <Chatbot />
+      </div>
 
 
 

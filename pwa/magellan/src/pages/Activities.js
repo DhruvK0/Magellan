@@ -1,31 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 // import { View, Text, StyleSheet, FlatList, Dimensions } from 'react-native';
 import { useLocation } from 'react-router-dom';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { useState } from 'react';
 import axios from 'axios';
 import Chatbot from './Chatbot';
+import { db } from '../firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 const functions = getFunctions();
 const genProfile = httpsCallable(functions, 'generate_profile');
+const getActivityList = httpsCallable(functions, 'get_activity_list');
+const getProductInfo = httpsCallable(functions, 'get_product_info');
 
-
-
-genProfile({ trip_id: "7XYMrtfBAU7I7ZbFxJit" },{
-  headers: {
-    'Content-Type': 'application/json'
-  }
-}).then((result) => {
-  const data = result.data;
-  console.log(data);
-}).catch((error) => {
-  const code = error.code;
-  const message = error.message;
-  const details = error.details;
-  console.log("Code: ", code)
-  console.log('Message: ', message);
-  console.log("Details: ", details);
-})
+//get the session id from the url
 
 const data = [
   { id: '1', title: 'Card 1' },
@@ -88,12 +76,107 @@ const eventData = {
 
 export const ActivitiesView = () => {
   //get the pushed id from the navigation and display it
-  const [data, setData] = useState(null);
+  const [sessionProfile, setSessionProfile] = useState(null);
+  const [sessionActivities, setSessionActivities] = useState(null);
+  const [activityDetails, setActivityDetails] = useState(null);
   const location = useLocation();
-  const session_id = location.pathname.split('/')[2] 
+  const trip_id = location.pathname.split('/')[2]
+  
+  //once trip_id is set, use the trip id to check if there is a profile entry in the firestore database, if not, call the /generate_profile endpoint and add that to the database
+
+  // create a useEffect that checks if the trip_id is set, if it is, call the /get_session endpoint and set the data to the returned json object
+
+  useEffect(() => {
+    const getProfile = async () => {
+        if (trip_id) {
+          const docRef = doc(db, "sessions", trip_id)
+          const docSnap = await getDoc(docRef)
+
+          if (docSnap.exists()) {
+            const data = docSnap.data()
+            if (data.text_preferences) {
+              console.log("profile exists")
+              setSessionProfile(data.text_preferences);
+              getActivityList({ trip_id: trip_id }, {
+                  headers: {
+                    'Content-Type': 'application/json'
+                  }
+                }).then((result) => {
+                  setSessionActivities(result.data);
+                }
+                ).catch((error) => {
+                  const code = error.code;
+                  const message = error.message;
+                  const details = error.details;
+                  console.log("Code: ", code)
+                  console.log('Message: ', message);
+                  console.log("Details: ", details);
+                })
+            } else {
+              console.log("profile does not exist, creating profile")
+              genProfile({ trip_id: trip_id }, {
+              headers: {
+                'Content-Type': 'application/json'
+                }
+              }).then((result) => {
+                setSessionProfile(docSnap.data().text_preferences);
+                getActivityList({ trip_id: trip_id }, {
+                  headers: {
+                    'Content-Type': 'application/json'
+                  }
+                }).then((result) => {
+                  setSessionActivities(result.data);
+                }
+                ).catch((error) => {
+                  const code = error.code;
+                  const message = error.message;
+                  const details = error.details;
+                  console.log("Code: ", code)
+                  console.log('Message: ', message);
+                  console.log("Details: ", details);
+                })
+              }).catch((error) => {
+                const code = error.code;
+                const message = error.message;
+                const details = error.details;
+                console.log("Code: ", code)
+                console.log('Message: ', message);
+                console.log("Details: ", details);
+              })
+            }
+          } else { 
+            console.log("No such document!")
+          }
+        }
+    }
+    getProfile();
+  })
+
+  if (sessionActivities) {
+    //call the /get_activity endpoint for each activity in the sessionActivities list and add the returned json object to the sessionActivities list
+    for (const activity in sessionActivities) {
+      getProductInfo({ id: activity }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((result) => {
+        sessionActivities.push(result.data);
+      }).catch((error) => {
+        const code = error.code;
+        const message = error.message;
+        const details = error.details;
+        console.log("Code: ", code)
+        console.log('Message: ', message);
+        console.log("Details: ", details);
+      })
+    }
+  }
+
 
   // axios.get('https://us-central1-magellan-62c66.cloudfunctions.net/generate_profile', {
-  //   trip_id: '7XYMrtfBAU7I7ZbFxJit'}).then((response) => {
+  //   trip_id: '7XYMrtfBAU7I7ZbFxJit'}, {headers: {
+  //   'Content-Type': 'application/json'
+  // }}).then((response) => {
   //   console.log(response)
   // })
 
@@ -108,15 +191,21 @@ export const ActivitiesView = () => {
     //   <p>Session ID: {session_id}</p>
       
     // </div>
-    <div>
+    
+      sessionActivities ? sessionActivities.map((item, index) => (
+        <EventCard key={index} {...item} />
+      )) :    
+       <div>
       <div className="container mx-auto mt-8">
         <EventCard {...eventData} />
       </div>
-
-      <Chatbot />
       
+      <Chatbot />
 
     </div>
+
+
+
     
     // <View style={styles.container}>
     //   <FlatList

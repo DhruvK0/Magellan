@@ -51,7 +51,8 @@ const EventCard = ({ title, image, rating, link, price, description }) => {
           {generateStars(rating)}
         </div>
         <p className="text-gray-700 mb-4">{description}</p>
-        <p className="text-lg font-bold mb-2">{`Price: $${price}`}</p>
+        {/* <p className="text-lg font-bold mb-2">{`Price: $${price}`}</p> */}
+        <p className='text-lg font-bold mb-2'>{price}</p>
         <a
           href={link}
           target="_blank"
@@ -99,8 +100,7 @@ export const ActivitiesView = () => {
             const data = docSnap.data()
             if (data.text_preferences) {
               console.log("profile exists")
-              console.log(trip_id)
-              setSessionProfile(data.text_preferences);
+               setSessionProfile(data.text_preferences);
               getActivityList({ trip_id: trip_id }, {
                   headers: {
                     'Content-Type': 'application/json'

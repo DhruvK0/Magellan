@@ -9,7 +9,11 @@ import { useState } from 'react';
 const functions = getFunctions();
 const genProfile = httpsCallable(functions, 'generate_profile');
 
-genProfile({ trip_id: "7XYMrtfBAU7I7ZbFxJit" }).then((result) => {
+genProfile({ trip_id: "7XYMrtfBAU7I7ZbFxJit" },{
+  headers: {
+    'Content-Type': 'application/json'
+  }
+}).then((result) => {
   const data = result.data;
   console.log(data);
 }).catch((error) => {

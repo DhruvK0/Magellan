@@ -8,6 +8,9 @@ import Chatbot from './Chatbot';
 import { db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { act } from 'react-dom/test-utils';
+import TimelineWindow from './TimelineWindow';
+import ExpandingSidebar from './Sidebar';
+
 
 const functions = getFunctions();
 const genProfile = httpsCallable(functions, 'generate_profile');
@@ -220,15 +223,28 @@ export const ActivitiesView = () => {
   return (
       sessionActivities ? 
       // check if every value in the sessionativities list has a corresponding value in the activityDetails list, if not, call the /get_activity endpoint and add that to the activityDetails list
-
+      //make a sidebar that can be expanded on the right side to show the timeline, in addiditon to the chatbot and the activities
+      
       activityDetails ?
       <div>
-        { sessionActivities.map((item, index) => (
-          
-          <EventCard key={index} {...activityDetails[item]} />
-        )) } 
+        <div className="container mx-auto mt-8">
+          <div className="flex flex-row">
+            <div className="w-2/3">
+              { sessionActivities.map((item, index) => (
+                activityDetails[item] ?
+                <div>
+                  <EventCard key={index} {...activityDetails[item]} />
+                </div> : <div></div>
+              )) } 
+            </div>
+            <div className="w-1/3">
+              <ExpandingSidebar startDate={"01/01/24"} endDate={"01/06/24"} />
+            </div>
+            
+          </div>
+        </div>
         <Chatbot />
-      </div> :   
+      </div> :
       
       <div>
         <div className="container mx-auto mt-8">

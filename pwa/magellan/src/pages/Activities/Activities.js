@@ -9,7 +9,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import TimelineWindow from './TimelineWindow';
 import ExpandingSidebar from './Sidebar';
 import TruncatedText from './TruncatedText';
-
+import { SessionUpdateActivities } from '../../database_functions/Sessions';
 const functions = getFunctions();
 const genProfile = httpsCallable(functions, 'generate_profile');
 const getActivityList = httpsCallable(functions, 'get_activity_list');
@@ -74,6 +74,7 @@ export const ActivitiesView = () => {
   const [sessionActivities, setSessionActivities] = useState([]);
   const [activityDetails, setActivityDetails] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [itinerary, setItinerary] = useState({});
 
   const location = useLocation();
   const trip_id = location.pathname.split('/')[2]
@@ -81,6 +82,13 @@ export const ActivitiesView = () => {
   //once trip_id is set, use the trip id to check if there is a profile entry in the firestore database, if not, call the /generate_profile endpoint and add that to the database
 
   // create a useEffect that checks if the trip_id is set, if it is, call the /get_session endpoint and set the data to the returned json object
+
+  //create a handler function that updates the itinerary object state variable
+
+  const handleItinerary = (newItinerary) => {
+    setItinerary(newItinerary);
+  }
+
 
   useEffect(() => {
     const getProfile = async () => {
@@ -94,7 +102,8 @@ export const ActivitiesView = () => {
               console.log("profile exists")
                setSessionProfile(data.text_preferences);
                setDates(data.dates)
-              getActivityList({ trip_id: trip_id }, {
+               setItinerary(data.activities)
+               getActivityList({ trip_id: trip_id }, {
                   headers: {
                     'Content-Type': 'application/json'
                   }
@@ -194,6 +203,10 @@ export const ActivitiesView = () => {
     }
   }, [sessionActivities, activityDetails])
 
+  //create a useEffect that updates the session in the db if the itinerary is updated
+  useEffect(() => {
+    SessionUpdateActivities(trip_id, itinerary);
+  }, [itinerary])
 
 
   // check if there is already an activites list for this session, if not call the /get_activity_list endpoint and add that to the session
@@ -211,7 +224,7 @@ export const ActivitiesView = () => {
   }
 
   return (
-      sessionActivities && activityDetails && dates ? 
+      sessionActivities && activityDetails && dates && itinerary ? 
       // check if every value in the sessionativities list has a corresponding value in the activityDetails list, if not, call the /get_activity endpoint and add that to the activityDetails list
       //make a sidebar that can be expanded on the right side to show the timeline, in addiditon to the chatbot and the activities
       <div>
@@ -226,7 +239,7 @@ export const ActivitiesView = () => {
               )) } 
             </div>
             <div className="w-1/3">
-              <TimelineWindow tripDates={dates}/>
+              <TimelineWindow tripDates={dates} activityDict={itinerary} handler={handleItinerary}/>
             </div> 
           </div>
         </div>

@@ -73,22 +73,15 @@ export async function SessionDelete(session_id, host_id) {
     }
 }
 
-//create a functin to update the activities object by adding a new activity_id for a list in a given date
-export async function SessionAddActivity(session_id, date, activity_id) {
-    const sessionRef = doc(db, "sessions", session_id);
-    const sessionDoc = await getDoc(sessionRef);
-    if (sessionDoc.exists()) {
-        const sessionData = sessionDoc.data();
-        const sessionActivities = sessionData.activities;
-        sessionActivities[date].push(activity_id);
-        await updateDoc(sessionRef, {
-            activities: sessionActivities,
-        });
-        console.log("Activity added to session");
-    } else {
-        console.log("Session not found");
-    }
+//create a functin to update the activities field whenever anything changes in the object
+export async function SessionUpdateActivities(session_id, activities) {
+    await updateDoc(doc(db, "sessions", session_id), {
+        activities: activities,
+    });
+    console.log("Session activities updated");
 }
+
+
 
 function generateEmptyItinerary(start, end) {
     const startDate = new Date(start);

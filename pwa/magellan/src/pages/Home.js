@@ -3,7 +3,7 @@ import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import { useUserAuth } from "../utils/AuthContext";
 import { ProfileGet } from "../database_functions/Profile";
-import { SessionGet } from "../database_functions/Sessions";
+import { SessionGet, SessionDelete } from "../database_functions/Sessions";
 
 const Home = () => {
   const { user } = useUserAuth();
@@ -33,19 +33,47 @@ const Home = () => {
 // create a component that takes in a trip destination and an id and creates a card for it
 const TripCard = ({destination, id}) => {
   //create a handler to navigate to the route /trips/:id
+  const { user } = useUserAuth();
   const navigate = useNavigate();
   const handleTripClick = () => {
     navigate(`/trips/${id}`);
   }
 
-  //create a card that displays the destination and when clicked, navigates to the route /trips/:id and has rounded corners
+  const multipleDestinations = ({destination}) => {
+    return (
+      <div onClick={handleTripClick}>
+        {destination.map((item, index) => (
+          <div key={index}>
+            <p>{item}</p>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
   return (  
-    <div onClick={handleTripClick} className="bg-slate-100 p-4 box mt-3 text-center mb-8">
-      { Array.isArray(destination) ? destination.map((item, index) => (
+    <div className="bg-slate-100 p-4 box mt-3 text-center mb-8">
+      { Array.isArray(destination) ? 
+      // <div>
+      //   <multipleDestinations destination={destination} />
+      //   <Button variant="danger" onClick={() => SessionDelete(id, user.uid)}>Delete</Button>
+      // </div>
+      
+      destination.map((item, index) => (
         <div key={index} className="mb-4">
           <p>{item}</p>
+          <Button variant="danger" onClick={() => SessionDelete(id)}>Delete</Button>
         </div>
-      )) : <p className="text-gray-600">{destination}</p> }
+      ))
+       : 
+      <div>
+        <div onClick={handleTripClick} className="bg-slate-300">
+          <p className="text-gray-600">{destination}</p> 
+        </div>
+        <Button variant="danger" onClick={() => SessionDelete(id, user.uid)}>Delete</Button>
+      </div>
+        
+        }
       
     </div>
   );

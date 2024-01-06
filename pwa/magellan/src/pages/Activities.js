@@ -3,11 +3,9 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { useState } from 'react';
-import axios from 'axios';
 import Chatbot from './Chatbot';
 import { db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import { act } from 'react-dom/test-utils';
 import TimelineWindow from './TimelineWindow';
 import ExpandingSidebar from './Sidebar';
 
@@ -17,17 +15,6 @@ const genProfile = httpsCallable(functions, 'generate_profile');
 const getActivityList = httpsCallable(functions, 'get_activity_list');
 const getProductInfo = httpsCallable(functions, 'get_product_info');
 
-//get the session id from the url
-
-const data = [
-  { id: '1', title: 'Card 1' },
-  { id: '2', title: 'Card 2' },
-  { id: '3', title: 'Card 3' },
-  // Add more data as needed
-];
-
-
-const numColumns = 2;
 
 //create a card component that takes in a dictionary of data and displays each of the values in a card if they exist, make sure to 
 
@@ -81,6 +68,7 @@ const eventData = {
 
 export const ActivitiesView = () => {
   //get the pushed id from the navigation and display it
+  const [dates, setDates] = useState([]);
   const [sessionProfile, setSessionProfile] = useState(null);
   const [sessionActivities, setSessionActivities] = useState([]);
   const [activityDetails, setActivityDetails] = useState({});
@@ -104,6 +92,7 @@ export const ActivitiesView = () => {
             if (data.text_preferences) {
               console.log("profile exists")
                setSessionProfile(data.text_preferences);
+               setDates(data.dates)
               getActivityList({ trip_id: trip_id }, {
                   headers: {
                     'Content-Type': 'application/json'
@@ -221,11 +210,9 @@ export const ActivitiesView = () => {
   }
 
   return (
-      sessionActivities ? 
+      sessionActivities && activityDetails && dates ? 
       // check if every value in the sessionativities list has a corresponding value in the activityDetails list, if not, call the /get_activity endpoint and add that to the activityDetails list
       //make a sidebar that can be expanded on the right side to show the timeline, in addiditon to the chatbot and the activities
-      
-      activityDetails ?
       <div>
         <div className="container mx-auto mt-8">
           <div className="flex flex-row">
@@ -238,9 +225,8 @@ export const ActivitiesView = () => {
               )) } 
             </div>
             <div className="w-1/3">
-              <ExpandingSidebar startDate={"01/01/24"} endDate={"01/06/24"} />
-            </div>
-            
+              <TimelineWindow tripDates={dates}/>
+            </div> 
           </div>
         </div>
         <Chatbot />
@@ -251,48 +237,6 @@ export const ActivitiesView = () => {
           <EventCard {...eventData} />
         </div>
         <Chatbot />
-      </div> :
-
-      <div>
-        <div className="container mx-auto mt-8">
-          <EventCard {...eventData} />
-        </div>
-        <Chatbot />
-      </div>
+      </div> 
     );
-
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-  // return (
-  //     sessionActivities ? 
-  //     // check if every value in the sessionativities list has a corresponding value in the activityDetails list, if not, call the /get_activity endpoint and add that to the activityDetails list
-
-  //     sessionActivities.every((item) => activityDetails[item]) ?
-  //     <div>
-  //       { sessionActivities.map((item, index) => (
-  //         activityDetails[item] ?
-  //         <div>
-  //           <p>{item}</p>
-  //           <p>{activityDetails[item]}</p>
-  //         </div> : <div></div>
-
-  //         // <EventCard key={index} {...activityDetails[item]} />
-  //       )) } 
-  //       <Chatbot />
-  //     </div> :   
-      
-  //     <div>
-  //       <div className="container mx-auto mt-8">
-  //         <EventCard {...eventData} />
-  //       </div>
-  //       <Chatbot />
-  //     </div> :
-
-  //     <div>
-  //       <div className="container mx-auto mt-8">
-  //         <EventCard {...eventData} />
-  //       </div>
-  //       <Chatbot />
-  //     </div>
-  // );
 };

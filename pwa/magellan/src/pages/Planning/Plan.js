@@ -10,13 +10,13 @@ import {
   FormGroup,
   FormControlLabel,
 } from '@mui/material';
-import FadeIn from './FadeIn';
-import exportUserData from './exportUserData';
+import FadeIn from '../FadeIn';
+import exportUserData from '../exportUserData';
 import { useNavigate } from 'react-router-dom';
-import { useItinerary } from '../utils/ItineraryContext';
+import { useItinerary } from '../../utils/ItineraryContext';
 import axios from 'axios';
-import { useUserAuth } from '../utils/AuthContext';
-import { SessionCreate } from '../database_functions/Sessions';
+import { useUserAuth } from '../../utils/AuthContext';
+import { SessionCreate } from '../../database_functions/Sessions';
 
 
 const steps = ['Destinations', 'Travel Details', 'Preferences'];

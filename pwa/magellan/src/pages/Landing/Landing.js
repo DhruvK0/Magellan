@@ -4,8 +4,7 @@ import { Grid, Typography, Button, Paper } from '@mui/material';
 import { motion } from 'framer-motion'; // For animation
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import landingImage from '../assets/img6.jpg';
-import {ReactComponent as ProductFlow} from '../assets/ProductFlow.svg'
+import {ReactComponent as ProductFlow} from '../../assets/ProductFlow.svg'
 import WaitlistForm from './Waitlist'
 
 const Landing = () => {

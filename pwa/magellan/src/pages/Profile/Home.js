@@ -1,9 +1,9 @@
 import React, { useState, useEffect, Suspense } from "react";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router";
-import { useUserAuth } from "../utils/AuthContext";
-import { ProfileGet } from "../database_functions/Profile";
-import { SessionGet, SessionDelete } from "../database_functions/Sessions";
+import { useUserAuth } from "../../utils/AuthContext";
+import { ProfileGet } from "../../database_functions/Profile";
+import { SessionGet, SessionDelete } from "../../database_functions/Sessions";
 
 const Home = () => {
   const { user } = useUserAuth();

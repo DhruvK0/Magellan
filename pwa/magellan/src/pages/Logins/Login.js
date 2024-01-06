@@ -3,8 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { Form, Alert } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import GoogleButton from "react-google-button";
-import { useUserAuth } from "../utils/AuthContext";
-import { ProfileCreate } from "../database_functions/Profile";
+import { useUserAuth } from "../../utils/AuthContext";
+import { ProfileCreate } from "../../database_functions/Profile";
 
 const Login = () => {
   const [email, setEmail] = useState("");

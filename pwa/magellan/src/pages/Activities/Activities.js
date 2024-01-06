@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { useState } from 'react';
 import Chatbot from './Chatbot';
-import { db } from '../firebase';
+import { db } from '../../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import TimelineWindow from './TimelineWindow';
 import ExpandingSidebar from './Sidebar';
@@ -38,7 +38,7 @@ const EventCard = ({ title, image, rating, link, price, description }) => {
       <div className="w-2/3 pl-4">
         <h2 className="text-xl font-bold mb-2">{title}</h2>
         <div className="text-yellow-500 mb-2">
-          {generateStars(rating)}
+          {generateStars(rating)} 
         </div>
         <TruncatedText text={description} cutoffLength={200} />
 
@@ -50,7 +50,7 @@ const EventCard = ({ title, image, rating, link, price, description }) => {
           rel="noopener noreferrer"
           className="text-blue-500 hover:underline"
         >
-          Learn more
+          Get Tickets
         </a>
       </div>
     </div>

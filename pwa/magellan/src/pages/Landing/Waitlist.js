@@ -7,7 +7,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { db } from '../firebase';   
+import { db } from '../../firebase';   
 import { collection, addDoc, serverTimestamp, where, query, getDocs, orderBy } from "firebase/firestore";
 
 function WaitlistForm() {

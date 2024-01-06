@@ -8,7 +8,7 @@ import { db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import TimelineWindow from './TimelineWindow';
 import ExpandingSidebar from './Sidebar';
-
+import TruncatedText from './TruncatedText';
 
 const functions = getFunctions();
 const genProfile = httpsCallable(functions, 'generate_profile');
@@ -36,11 +36,12 @@ const EventCard = ({ title, image, rating, link, price, description }) => {
 
       {/* Right Column */}
       <div className="w-2/3 pl-4">
-        <h2 className="text-4xl font-bold mb-2">{title}</h2>
+        <h2 className="text-xl font-bold mb-2">{title}</h2>
         <div className="text-yellow-500 mb-2">
           {generateStars(rating)}
         </div>
-        <p className="text-gray-700 mb-4">{description}</p>
+        <TruncatedText text={description} cutoffLength={200} />
+
         {/* <p className="text-lg font-bold mb-2">{`Price: $${price}`}</p> */}
         <p className='text-lg font-bold mb-2'>{price}</p>
         <a

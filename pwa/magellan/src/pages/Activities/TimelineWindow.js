@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 
 //create a card component that takes in a dictionary of data, a list of activities, and a handler to add an activity to the list. for each of the activites in the list, create a timeline entry and if the correspoding date key has an empty list in the dictionary, display a paragraph that says no activities for this day
@@ -7,12 +7,16 @@ import React, { useState } from 'react';
 const TimelineWindow = ({ tripDates, itinerary,  addtimeline, setaddtimeline, setdate, currentDate}) => {
 
   //create a const to render the timeline entries from the dictionary given a date
-  const renderTimelineEntry = (title) => {
+  const RenderTimelineEntry = ({ itinerary, date }) => {
+    //rerender if the itinerary changes
+
     return (
-      <div className="flex flex-col items-center m-2">
-        <div className="w-4 h-4 bg-gray-600 rounded-full"></div>
-        <span className="text-xs">{title}</span>
-      </div>
+      itinerary[date].map((activity, index) => (
+        <div className="flex flex-col items-center m-2">
+          <div className="w-4 h-4 bg-gray-600 rounded-full"></div>
+          <span className="text-xs">{activity.title}</span>
+        </div>
+      ))
     );
   }
 
@@ -35,9 +39,8 @@ const TimelineWindow = ({ tripDates, itinerary,  addtimeline, setaddtimeline, se
                   <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
                 </svg>
               </button>
-              {itinerary && itinerary[date].length > 0 ? itinerary[date].map((activity, index) => (
-                  renderTimelineEntry(activity.title)
-              )) : <div>No activities for this day</div>}
+              <RenderTimelineEntry itinerary={itinerary} date={date} />
+              
             </div> :
 
             <div>
@@ -46,9 +49,7 @@ const TimelineWindow = ({ tripDates, itinerary,  addtimeline, setaddtimeline, se
                   <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
                 </svg>
               </button>
-              {itinerary && itinerary[date].length > 0 ? itinerary[date].map((activity, index) => (
-                  renderTimelineEntry(activity.title)
-              )) : <div>No activities for this day</div>}
+              <RenderTimelineEntry itinerary={itinerary} date={date} />
             </div>
           }
         </li>

@@ -35,6 +35,9 @@ const TimelineWindow = ({ tripDates, itinerary,  addtimeline, setaddtimeline, se
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
                 </svg>
               </button>
+              {itinerary && itinerary[date] ? itinerary[date].map((activity, index) => (
+                  renderTimelineEntry(activity.title)
+              )) : <div>No activities for this day</div>}
             </div> :
 
             <div>
@@ -43,12 +46,13 @@ const TimelineWindow = ({ tripDates, itinerary,  addtimeline, setaddtimeline, se
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
                 </svg>
               </button>
+              {itinerary && itinerary[date] ? itinerary[date].map((activity, index) => (
+                  renderTimelineEntry(activity.title)
+              )) : <div>No activities for this day</div>}
             </div>
           }
 
-          {itinerary && itinerary[date] ? itinerary[date].map((activity, index) => (
-              renderTimelineEntry(activity.title)
-          )) : <div>No activities for this day</div>}
+          
 
         </li>
       ))}

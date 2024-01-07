@@ -7,7 +7,6 @@ import Chatbot from './Chatbot';
 import { db } from '../../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import TimelineWindow from './TimelineWindow';
-import ExpandingSidebar from './Sidebar';
 import TruncatedText from './TruncatedText';
 import { SessionUpdateActivities } from '../../database_functions/Sessions';
 
@@ -22,16 +21,15 @@ const getProductInfo = httpsCallable(functions, 'get_product_info');
 const EventCard = ({ title, image, rating, link, price, description, activity_id, addtimeline, setaddtimeline, itinerary, setItinerary, date}) => {
   
   //create a const that updates the itinerary state variable when the add to selected date button is clicked
-  const handleAddActivity = (itinerary, setItinerary, activity_id, date, title) => {
+  const handleAddActivity = (itinerary, setItinerary, activity_id, date, title, trip_id) => {
     const newItinerary = itinerary;
     if (newItinerary[date]) {
       newItinerary[date].push({title: title, id: activity_id});
-      setItinerary(newItinerary);
     } else {
       newItinerary[date] = [{title: title, id: activity_id}];
-      setItinerary(newItinerary);
     }
-    console.log(itinerary)
+    setItinerary(newItinerary);
+    SessionUpdateActivities(trip_id, newItinerary);
   }
 
   
@@ -229,17 +227,6 @@ export const ActivitiesView = () => {
     }
   }, [sessionActivities, activityDetails])
 
-  //create a useEffect that updates the session in the db if the itinerary is updated
-  useEffect(() => {
-    SessionUpdateActivities(trip_id, itinerary);
-  }, [itinerary])
-
-
-  // check if there is already an activites list for this session, if not call the /get_activity_list endpoint and add that to the session
-
-  // using the returned activities, for each one call the /get_activity endpoint and parse each of the json objects into a card
-  
-  //create a const that parses each of the activities into a json object that can be used to create a card
 
   if (!isLoading) {
     return (  
@@ -260,7 +247,7 @@ export const ActivitiesView = () => {
               { sessionActivities.map((item, index) => (
                 activityDetails[item] ?
                 <div>
-                  <EventCard key={index} {...activityDetails[item]} activity_id={item} addtimeline={addtimeline} itinerary={itinerary} setItinerary={setItinerary} date={currentDate}/>
+                  <EventCard key={index} {...activityDetails[item]} activity_id={item} addtimeline={addtimeline} itinerary={itinerary} setItinerary={setItinerary} date={currentDate} trip_id={trip_id}/>
                 </div> : <div></div>
               )) } 
             </div>

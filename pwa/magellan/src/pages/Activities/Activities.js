@@ -18,7 +18,7 @@ const getProductInfo = httpsCallable(functions, 'get_product_info');
 
 //create a card component that takes in a dictionary of data and displays each of the values in a card if they exist, make sure to 
 
-const EventCard = ({ title, image, rating, link, price, description, activity_id, addtimeline, setaddtimeline, itinerary, setItinerary, date}) => {
+const EventCard = ({ title, image, rating, link, price, description, activity_id, addtimeline, setaddtimeline, itinerary, setItinerary, date, trip_id}) => {
   
   //create a const that updates the itinerary state variable when the add to selected date button is clicked
   const handleAddActivity = (itinerary, setItinerary, activity_id, date, title, trip_id) => {
@@ -70,7 +70,7 @@ const EventCard = ({ title, image, rating, link, price, description, activity_id
       {
         addtimeline ?
         <div className="w-1/3">
-          <button onClick={() => handleAddActivity(itinerary, setItinerary, activity_id, date, title)} className="bg-[#189490] hover:bg-[#17585E] text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-full">
+          <button onClick={() => handleAddActivity(itinerary, setItinerary, activity_id, date, title, trip_id)} className="bg-[#189490] hover:bg-[#17585E] text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-full">
             Add to Selected Date
           </button>
         </div> : <div></div>

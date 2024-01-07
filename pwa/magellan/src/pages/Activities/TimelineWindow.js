@@ -46,11 +46,8 @@ const TimelineWindow = ({ tripDates, itinerary,  addtimeline, setaddtimeline, se
             </div>
           }
 
-          {itinerary[date] ? itinerary[date].map((activity, index) => (
-            <div key={index} className="flex flex-row items-center">
-              {renderTimelineEntry(activity.title)}
-              <div className="flex-1 border-t border-gray-200 dark:border-gray-700"></div>
-            </div>
+          {itinerary && itinerary[date] ? itinerary[date].map((activity, index) => (
+              renderTimelineEntry(activity.title)
           )) : <div>No activities for this day</div>}
 
         </li>

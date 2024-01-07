@@ -19,7 +19,22 @@ const getProductInfo = httpsCallable(functions, 'get_product_info');
 
 //create a card component that takes in a dictionary of data and displays each of the values in a card if they exist, make sure to 
 
-const EventCard = ({ title, image, rating, link, price, description, addtimeline, eventHandler }) => {
+const EventCard = ({ title, image, rating, link, price, description, activity_id, addtimeline, setaddtimeline, itinerary, setItinerary, date}) => {
+  
+  //create a const that updates the itinerary state variable when the add to selected date button is clicked
+  const handleAddActivity = (itinerary, setItinerary, activity_id, date, title) => {
+    const newItinerary = itinerary;
+    if (newItinerary[date]) {
+      newItinerary[date].push({title: title, id: activity_id});
+      setItinerary(newItinerary);
+    } else {
+      newItinerary[date] = [{title: title, id: activity_id}];
+      setItinerary(newItinerary);
+    }
+    console.log(itinerary)
+  }
+
+  
   const generateStars = (rating) => {
     const stars = [];
     for (let i = 0; i < rating; i++) {
@@ -57,7 +72,7 @@ const EventCard = ({ title, image, rating, link, price, description, addtimeline
       {
         addtimeline ?
         <div className="w-1/3">
-          <button className="bg-[#189490] hover:bg-[#17585E] text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-full">
+          <button onClick={() => handleAddActivity(itinerary, setItinerary, activity_id, date, title)} className="bg-[#189490] hover:bg-[#17585E] text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-full">
             Add to Selected Date
           </button>
         </div> : <div></div>
@@ -245,7 +260,7 @@ export const ActivitiesView = () => {
               { sessionActivities.map((item, index) => (
                 activityDetails[item] ?
                 <div>
-                  <EventCard key={index} {...activityDetails[item]} addtimeline={addtimeline}/>
+                  <EventCard key={index} {...activityDetails[item]} activity_id={item} addtimeline={addtimeline} itinerary={itinerary} setItinerary={setItinerary} date={currentDate}/>
                 </div> : <div></div>
               )) } 
             </div>

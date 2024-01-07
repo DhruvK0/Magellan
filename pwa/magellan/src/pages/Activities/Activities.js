@@ -10,6 +10,7 @@ import TimelineWindow from './TimelineWindow';
 import ExpandingSidebar from './Sidebar';
 import TruncatedText from './TruncatedText';
 import { SessionUpdateActivities } from '../../database_functions/Sessions';
+
 const functions = getFunctions();
 const genProfile = httpsCallable(functions, 'generate_profile');
 const getActivityList = httpsCallable(functions, 'get_activity_list');
@@ -18,7 +19,7 @@ const getProductInfo = httpsCallable(functions, 'get_product_info');
 
 //create a card component that takes in a dictionary of data and displays each of the values in a card if they exist, make sure to 
 
-const EventCard = ({ title, image, rating, link, price, description }) => {
+const EventCard = ({ title, image, rating, link, price, description, addtimeline, eventHandler }) => {
   const generateStars = (rating) => {
     const stars = [];
     for (let i = 0; i < rating; i++) {
@@ -53,6 +54,14 @@ const EventCard = ({ title, image, rating, link, price, description }) => {
           Get Tickets
         </a>
       </div>
+      {
+        addtimeline ?
+        <div className="w-1/3">
+          <button className="bg-[#189490] hover:bg-[#17585E] text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-full">
+            Add to Selected Date
+          </button>
+        </div> : <div></div>
+      }
     </div>
   );
 };
@@ -75,6 +84,8 @@ export const ActivitiesView = () => {
   const [activityDetails, setActivityDetails] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [itinerary, setItinerary] = useState({});
+  const [addtimeline, setAddTimeline] = useState(false);
+  const [currentDate, setCurrentDate] = useState(null);
 
   const location = useLocation();
   const trip_id = location.pathname.split('/')[2]
@@ -234,12 +245,12 @@ export const ActivitiesView = () => {
               { sessionActivities.map((item, index) => (
                 activityDetails[item] ?
                 <div>
-                  <EventCard key={index} {...activityDetails[item]} />
+                  <EventCard key={index} {...activityDetails[item]} addtimeline={addtimeline}/>
                 </div> : <div></div>
               )) } 
             </div>
             <div className="w-1/3">
-              <TimelineWindow tripDates={dates} activityDict={itinerary} handler={handleItinerary}/>
+              <TimelineWindow tripDates={dates} itinerary={itinerary} addtimeline={addtimeline} setaddtimeline={setAddTimeline} setdate={setCurrentDate} currentDate={currentDate}/>
             </div> 
           </div>
         </div>

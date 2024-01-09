@@ -211,7 +211,7 @@ export const ActivitiesView = () => {
       }
   
       setActivityDetails(details);
-      setIsLoading(false);
+      // setIsLoading(false);
     };
   
     if (sessionActivities.length > 0) {
@@ -219,6 +219,13 @@ export const ActivitiesView = () => {
     }
   }, [sessionActivities]);
   
+
+  useEffect(() => {
+    if (dates.length > 0) {
+      setIsLoading(false);
+    }
+  }
+  , [dates])
 
   useEffect(() => {
     
@@ -229,16 +236,27 @@ export const ActivitiesView = () => {
   }, [sessionActivities, activityDetails])
 
 
-  // if (!isLoading) {
-  //   return (  
-  //   <div>
-  //     Loading
-  //   </div>
-  // )
-  // }
+  if (!isLoading) {
+    return (  
+      // make the title above the loading bar say "Getting Your Activities"
+    <div>
+      <div className="flex justify-center items-center h-screen">
+        <div className="grid grid-cols-1 grid-rows-2 ">
+          <div className="row-span-1">
+            <p className='text-2xl text-[#189490]'>Getting Your Activities</p>
+          </div>
+          <div className="flex justify-center">
+            <BounceLoader color="#189490" size={100} />
+          </div>
+        </div>
+      </div>
+      <Chatbot />
+    </div> 
+  )
+  }
 
   return (
-      sessionActivities.length > 0 && activityDetails && dates.length > 0 && itinerary ? 
+      sessionActivities && activityDetails && dates && itinerary ? 
       // check if every value in the sessionativities list has a corresponding value in the activityDetails list, if not, call the /get_activity endpoint and add that to the activityDetails list
       //make a sidebar that can be expanded on the right side to show the timeline, in addiditon to the chatbot and the activities
       <div>
@@ -253,7 +271,6 @@ export const ActivitiesView = () => {
               )) } 
             </div>
             <div className="w-1/3">
-              <h1>Testing New tag</h1>
               <TimelineWindow tripDates={dates} itinerary={itinerary} addtimeline={addtimeline} setaddtimeline={setAddTimeline} setdate={setCurrentDate} currentDate={currentDate}/>
             </div> 
           </div>

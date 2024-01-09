@@ -9,6 +9,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import TimelineWindow from './TimelineWindow';
 import TruncatedText from './TruncatedText';
 import { SessionUpdateActivities } from '../../database_functions/Sessions';
+import { BounceLoader } from 'react-spinners';
 
 const functions = getFunctions();
 const genProfile = httpsCallable(functions, 'generate_profile');
@@ -228,16 +229,16 @@ export const ActivitiesView = () => {
   }, [sessionActivities, activityDetails])
 
 
-  if (!isLoading) {
-    return (  
-    <div>
-      Loading
-    </div>
-  )
-  }
+  // if (!isLoading) {
+  //   return (  
+  //   <div>
+  //     Loading
+  //   </div>
+  // )
+  // }
 
   return (
-      sessionActivities && activityDetails && dates && itinerary ? 
+      sessionActivities.length > 0 && activityDetails && dates.length > 0 && itinerary ? 
       // check if every value in the sessionativities list has a corresponding value in the activityDetails list, if not, call the /get_activity endpoint and add that to the activityDetails list
       //make a sidebar that can be expanded on the right side to show the timeline, in addiditon to the chatbot and the activities
       <div>
@@ -252,6 +253,7 @@ export const ActivitiesView = () => {
               )) } 
             </div>
             <div className="w-1/3">
+              <h1>Testing New tag</h1>
               <TimelineWindow tripDates={dates} itinerary={itinerary} addtimeline={addtimeline} setaddtimeline={setAddTimeline} setdate={setCurrentDate} currentDate={currentDate}/>
             </div> 
           </div>
@@ -260,8 +262,8 @@ export const ActivitiesView = () => {
       </div> :
       
       <div>
-        <div className="container mx-auto mt-8">
-          <EventCard {...eventData} />
+        <div className="flex justify-center items-center h-screen">
+          <BounceLoader color="#189490" size={100} />
         </div>
         <Chatbot />
       </div> 

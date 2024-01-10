@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import { db } from '../../firebase';   
 import { collection, addDoc, serverTimestamp, where, query, getDocs, orderBy } from "firebase/firestore";
+import { useNavigate } from 'react-router-dom';
 
 function WaitlistForm() {
   const [open, setOpen] = useState(false);
@@ -17,10 +18,12 @@ function WaitlistForm() {
   const [email, setEmail] = useState('');
   const [position, setPosition] = useState(null);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
 
   const handleOpen = () => {
-    setOpen(true);
+    // setOpen(true);
+    navigate('/login');
   };
 
   const handleClose = () => {
@@ -69,7 +72,7 @@ function WaitlistForm() {
   return (
     <div>
       <Button variant="contained" onClick={handleOpen} class="bg-[#189490] hover:bg-[#17585E] text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-full">
-        Sign Up for the Waitlist
+        Find Your Next Adventure
       </Button>
       <Modal
         open={open}

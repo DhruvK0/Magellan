@@ -44,7 +44,10 @@ const TimelineWindow = ({ tripDates, itinerary,  addtimeline, setaddtimeline, se
                   <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
                 </svg>
               </button>
-              <RenderTimelineEntry itinerary={itinerary} date={date} />
+              {itinerary ?
+                <RenderTimelineEntry itinerary={itinerary} date={date} /> :
+                <p className="text-sm font-normal leading-none text-gray-400 dark:text-gray-500">No activities for this day</p>
+              }
               
             </div> :
 
@@ -54,7 +57,11 @@ const TimelineWindow = ({ tripDates, itinerary,  addtimeline, setaddtimeline, se
                   <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
                 </svg>
               </button>
-              <RenderTimelineEntry itinerary={itinerary} date={date} />
+              {itinerary ?
+                <RenderTimelineEntry itinerary={itinerary} date={date} /> :
+                <p className="text-sm font-normal leading-none text-gray-400 dark:text-gray-500">No activities for this day</p>
+              }
+              {/* <RenderTimelineEntry itinerary={itinerary} date={date} /> */}
             </div>
           }
         </li>

@@ -104,17 +104,6 @@ export const ActivitiesView = () => {
   const location = useLocation();
   const trip_id = location.pathname.split('/')[2]
   
-  //once trip_id is set, use the trip id to check if there is a profile entry in the firestore database, if not, call the /generate_profile endpoint and add that to the database
-
-  // create a useEffect that checks if the trip_id is set, if it is, call the /get_session endpoint and set the data to the returned json object
-
-  //create a handler function that updates the itinerary object state variable
-
-  const handleItinerary = (newItinerary) => {
-    setItinerary(newItinerary);
-  }
-
-
   useEffect(() => {
     const getProfile = async () => {
         if (trip_id) {
@@ -151,13 +140,17 @@ export const ActivitiesView = () => {
                 'Content-Type': 'application/json'
                 }
               }).then((result) => {
-                setSessionProfile(docSnap.data().text_preferences);
                 getActivityList({ trip_id: trip_id }, {
                   headers: {
                     'Content-Type': 'application/json'
                   }
-                }).then((result) => {
+                }).then(async (result) => {
+                  const docSnapPost = await getDoc(docRef)
+                  const post_data = docSnapPost.data()
                   setSessionActivities(result.data);
+                  setSessionProfile(post_data.text_preferences);
+                  setDates(post_data.dates)
+                  setItinerary(post_data.activities)
                 }
                 ).catch((error) => {
                   const code = error.code;
@@ -220,12 +213,12 @@ export const ActivitiesView = () => {
   }, [sessionActivities]);
   
 
-  useEffect(() => {
-    if (dates.length > 0) {
-      setIsLoading(false);
-    }
-  }
-  , [dates])
+  // useEffect(() => {
+  //   if (dates.length > 0) {
+  //     setIsLoading(false);
+  //   } 
+  // }
+  // , [dates])
 
   useEffect(() => {
     
@@ -236,27 +229,27 @@ export const ActivitiesView = () => {
   }, [sessionActivities, activityDetails])
 
 
-  if (!isLoading) {
-    return (  
-      // make the title above the loading bar say "Getting Your Activities"
-    <div>
-      <div className="flex justify-center items-center h-screen">
-        <div className="grid grid-cols-1 grid-rows-2 ">
-          <div className="row-span-1">
-            <p className='text-2xl text-[#189490]'>Getting Your Activities</p>
-          </div>
-          <div className="flex justify-center">
-            <BounceLoader color="#189490" size={100} />
-          </div>
-        </div>
-      </div>
-      <Chatbot />
-    </div> 
-  )
-  }
+  // if (!isLoading) {
+  //   return (  
+  //     // make the title above the loading bar say "Getting Your Activities"
+  //   <div>
+  //     <div className="flex justify-center items-center h-screen">
+  //       <div className="grid grid-cols-1 grid-rows-2 ">
+  //         <div className="row-span-1">
+  //           <p className='text-2xl text-[#189490]'>Getting Your Activities</p>
+  //         </div>
+  //         <div className="flex justify-center">
+  //           <BounceLoader color="#189490" size={100} />
+  //         </div>
+  //       </div>
+  //     </div>
+  //     <Chatbot />
+  //   </div> 
+  // )
+  // }
 
   return (
-      sessionActivities && activityDetails && dates && itinerary ? 
+      sessionActivities.length > 0  && activityDetails && dates && itinerary ? 
       // check if every value in the sessionativities list has a corresponding value in the activityDetails list, if not, call the /get_activity endpoint and add that to the activityDetails list
       //make a sidebar that can be expanded on the right side to show the timeline, in addiditon to the chatbot and the activities
       <div>
@@ -280,7 +273,14 @@ export const ActivitiesView = () => {
       
       <div>
         <div className="flex justify-center items-center h-screen">
-          <BounceLoader color="#189490" size={100} />
+          <div className="grid grid-cols-1 grid-rows-2 ">
+            <div className="row-span-1">
+              <p className='text-2xl text-[#189490]'>Getting Your Activities</p>
+            </div>
+            <div className="flex justify-center">
+              <BounceLoader color="#189490" size={100} />
+            </div>
+          </div>
         </div>
         <Chatbot />
       </div> 

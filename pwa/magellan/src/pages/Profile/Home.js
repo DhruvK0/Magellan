@@ -22,7 +22,7 @@ const Home = () => {
       }      
     };
     getProfile();
-  }, []);
+  }, [user]);
   
   return (
       profile ? <ProfileLoader profile={profile} /> : <div>loading...</div> 

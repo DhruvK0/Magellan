@@ -4,6 +4,8 @@ import { useNavigate } from "react-router";
 import { useUserAuth } from "../../utils/AuthContext";
 import { ProfileGet } from "../../database_functions/Profile";
 import { SessionGet, SessionDelete } from "../../database_functions/Sessions";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebase";
 
 const Home = () => {
   const { user } = useUserAuth();
@@ -31,7 +33,7 @@ const Home = () => {
 
 
 // create a component that takes in a trip destination and an id and creates a card for it
-const TripCard = ({destination, id}) => {
+const TripCard = ({destination, id, setHostSessions}) => {
   //create a handler to navigate to the route /trips/:id
   const { user } = useUserAuth();
   const navigate = useNavigate();
@@ -51,18 +53,36 @@ const TripCard = ({destination, id}) => {
     )
   }
 
+  async function HandleHostDelete(id, host_id, setHostSessions ) {
+    try {
+      if (host_id) {
+          await SessionDelete(id, host_id);
+          //pull the updates session list from the database
+          const profileRef = doc(db, "profiles", host_id);
+          const profileDoc = await getDoc(profileRef);
+
+          if (profileDoc.exists()) {
+            const profileData = profileDoc.data();
+            const sessionList = profileData.session_host_list;
+            const sessions = await getSessions(sessionList);
+            setHostSessions(sessions);
+          } else {
+            console.log("Host profile not found");
+          }
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
   return (  
     <div className="bg-slate-100 p-4 box mt-3 text-center mb-8">
       { Array.isArray(destination) ? 
-      // <div>
-      //   <multipleDestinations destination={destination} />
-      //   <Button variant="danger" onClick={() => SessionDelete(id, user.uid)}>Delete</Button>
-      // </div>
       
       destination.map((item, index) => (
         <div key={index} className="mb-4">
           <p>{item}</p>
-          <Button variant="danger" onClick={() => SessionDelete(id)}>Delete</Button>
+          <Button variant="danger" onClick={async () => await HandleHostDelete(id, user.uid, setHostSessions)}>Delete</Button>
         </div>
       ))
        : 
@@ -74,7 +94,7 @@ const TripCard = ({destination, id}) => {
           </button>
         </div>
         <div className="mt-2">
-          <button onClick={handleTripClick} className="bg-[#F74F55] hover:bg-[#C44347] text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-1/2">
+          <button onClick={async () => await HandleHostDelete(id, user.uid, setHostSessions)} className="bg-[#F74F55] hover:bg-[#C44347] text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-1/2">
             Delete
           </button>
         </div>
@@ -171,7 +191,7 @@ function ProfileLoader({ profile }) {
               <h1 className="text-3xl font-bold mb-6">Hosted Sessions</h1>
                 {hostSessions ? hostSessions.map((item, index) => (
                   hostSessions.length === 0 ? <div>No Hosted Sessions</div> :
-                  <TripCard key={index} destination={item.prefs.host_id.destinations} id={item.session_id} />
+                  <TripCard key={index} destination={item.prefs.host_id.destinations} id={item.session_id} setHostSessions={setHostSessions}/>
                 )) : <div>loading...</div>}
             </div>
           </Suspense>

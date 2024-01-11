@@ -67,10 +67,17 @@ const TripCard = ({destination, id}) => {
       ))
        : 
       <div>
-        <div onClick={handleTripClick} className="bg-slate-300">
-          <p className="text-gray-600">{destination}</p> 
+        <h1 className="text-2xl font-bold mb-4">{destination}</h1>
+        <div>
+          <button onClick={handleTripClick} className="bg-[#189490] hover:bg-[#17585E] text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-1/2">
+            Go to Trip
+          </button>
         </div>
-        <Button variant="danger" onClick={() => SessionDelete(id, user.uid)}>Delete</Button>
+        <div className="mt-2">
+          <button onClick={handleTripClick} className="bg-[#F74F55] hover:bg-[#C44347] text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-1/2">
+            Delete
+          </button>
+        </div>
       </div>
         
         }

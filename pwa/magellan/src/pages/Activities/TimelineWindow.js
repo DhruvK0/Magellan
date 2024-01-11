@@ -12,7 +12,10 @@ const TimelineWindow = ({ tripDates, itinerary,  addtimeline, setaddtimeline, se
     //rerender if the itinerary changes
 
     return (
-      itinerary[date].map((activity, index) => (
+      //check if the date key is in the dictionary, if it is not, then dont render anything
+      itinerary[date] ?
+      <div>
+        { itinerary[date].map((activity, index) => (
         <div className="flex flex-col items-left m-2">
           <div className='flex'>
             <div>
@@ -21,8 +24,9 @@ const TimelineWindow = ({ tripDates, itinerary,  addtimeline, setaddtimeline, se
             <span className="text-xs">{activity.title}</span>
           </div>
         </div>
-      ))
-    );
+      )) } 
+      </div> : <div></div>
+    ); 
   }
 
   const handleAddActivity = (setaddtimeline, addtimeline, setdate, date) => {

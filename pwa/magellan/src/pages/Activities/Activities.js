@@ -23,14 +23,17 @@ const EventCard = ({ title, image, rating, link, price, description, activity_id
   
   //create a const that updates the itinerary state variable when the add to selected date button is clicked
   const handleAddActivity = (itinerary, setItinerary, activity_id, date, title, trip_id) => {
-    const newItinerary = itinerary;
-    if (newItinerary[date]) {
-      newItinerary[date].push({title: title, id: activity_id});
+    //create a new itinerary dictionary with the new activity added to the date
+    const new_itinerary = JSON.parse(JSON.stringify(itinerary))
+    if (date in new_itinerary) {
+      new_itinerary[date].push({activity_id: activity_id, title: title})
     } else {
-      newItinerary[date] = [{title: title, id: activity_id}];
+      new_itinerary[date] = [{activity_id: activity_id, title: title}]
     }
-    setItinerary(newItinerary);
-    SessionUpdateActivities(trip_id, newItinerary);
+    //update the itinerary state variable
+    setItinerary(new_itinerary)
+    //update the itinerary in the database
+    SessionUpdateActivities(trip_id, new_itinerary)
   }
 
   
@@ -176,6 +179,11 @@ export const ActivitiesView = () => {
     }
     getProfile();
   }, [])
+
+  useEffect(() => {
+    console.log('itinerary changed')
+  }, [itinerary])
+
 
   function filterActivity( activity ) {
     const activityData = {

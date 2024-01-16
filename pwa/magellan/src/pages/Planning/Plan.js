@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Stepper,
   Step,
@@ -43,10 +43,13 @@ const TravelForm = () => {
   const [endDateError, setEndDateError] = useState('');
   const [startDateError, setStartDateError] = useState('');
 
-  //get the current date and set it to current date, make sure it is in yyyy-mm-dd format
+  //get the current date and set it to current date, make sure it is in yyyy-mm-dd format, make sure to add a 0 to the month and day if they are less than 10
   const today = new Date();
-  const currentDate = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-  console.log(currentDate);
+  const dd = String(today.getDate()).padStart(2, '0');
+  const mm = String(today.getMonth()+1).padStart(2, '0'); //January is 0!
+  const yyyy = today.getFullYear();
+  const currentDate = yyyy + '-' + mm + '-' + dd;
+
 
 
   const [showDestinationError, setShowDestinationError] = useState(false); // New state variable
@@ -136,6 +139,12 @@ const TravelForm = () => {
   // Add the class 'overflow-y-auto' to enable scrolling when destinations exceed 3
   const destinationsContainerClass =
     numDestinations > 3 ? 'overflow-y-auto h-48' : 'h-auto';
+
+   // create a useEffect to console log the start date when it changes
+    useEffect(() => {
+      console.log(startDate);
+    }
+    , [startDate]);
 
   return (
     <div className="flex justify-center items-center h-screen">

@@ -10,6 +10,8 @@ import TimelineWindow from './TimelineWindow';
 import TruncatedText from './TruncatedText';
 import { SessionUpdateActivities } from '../../database_functions/Sessions';
 import { BounceLoader } from 'react-spinners';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 const functions = getFunctions();
 const genProfile = httpsCallable(functions, 'generate_profile');
@@ -107,6 +109,14 @@ export const ActivitiesView = () => {
 
   const location = useLocation();
   const trip_id = location.pathname.split('/')[2]
+
+  const scrollUp = () => {
+        document.querySelector('.scroll-container').scrollTop -= 50; // Adjust the scroll amount as needed
+    };
+
+  const scrollDown = () => {
+      document.querySelector('.scroll-container').scrollTop += 50; // Adjust the scroll amount as needed
+  };
   
   useEffect(() => {
     const getProfile = async () => {
@@ -240,13 +250,24 @@ export const ActivitiesView = () => {
             </div>
             <div className="flex flex-col w-1/3">
               <p className='text-4xl text-bold mb-5 justify-center'>Itinerary</p>
-              <div className="h-96 overflow-y-auto">
-                <TimelineWindow tripDates={dates} itinerary={itinerary} addtimeline={addtimeline} setaddtimeline={setAddTimeline} setdate={setCurrentDate} currentDate={currentDate}/>
+              <div className="flex scroll-arrow cursor-pointer p-2 transition duration-300 ease-in-out hover:bg-gray-100 justify-center" onClick={scrollUp}>
+                <FontAwesomeIcon icon={faChevronUp} />
+              </div>
+              <div className="scroll-container scrollbar-hide flex flex-col h-96 overflow-y-auto duration-500 ease-in-out">
+                <TimelineWindow tripDates={dates} 
+                  itinerary={itinerary}
+                  addtimeline={addtimeline} 
+                  setaddtimeline={setAddTimeline} 
+                  setdate={setCurrentDate} 
+                  currentDate={currentDate} />
+              </div>
+              <div className="flex scroll-arrow cursor-pointer p-2 transition duration-300 ease-in-out hover:bg-gray-100 justify-center" onClick={scrollDown}>
+                  <FontAwesomeIcon icon={faChevronDown} />
               </div>
             </div> 
             <div className="w-1/2">
               <p className='text-4xl text-bold mb-5 justify-center'>Activities</p>              
-              <div className="h-96 overflow-y-auto">
+              <div className="h-96 overflow-y-auto pr-5">
                 { sessionActivities.map((item, index) => (
                 activityDetails[item] ?
                 <div>

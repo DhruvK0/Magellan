@@ -22,13 +22,13 @@ const getProductInfo = httpsCallable(functions, 'get_product_info');
 const EventCard = ({ title, image, rating, link, price, description, activity_id, addtimeline, setaddtimeline, itinerary, setItinerary, date, trip_id}) => {
   
   //create a const that updates the itinerary state variable when the add to selected date button is clicked
-  const handleAddActivity = (itinerary, setItinerary, activity_id, date, title, trip_id) => {
+  const handleAddActivity = (itinerary, setItinerary, activity_id, date, title, link, trip_id) => {
     //create a new itinerary dictionary with the new activity added to the date
     const new_itinerary = JSON.parse(JSON.stringify(itinerary))
     if (date in new_itinerary) {
-      new_itinerary[date].push({activity_id: activity_id, title: title})
+      new_itinerary[date].push({activity_id: activity_id, title: title, link: link})
     } else {
-      new_itinerary[date] = [{activity_id: activity_id, title: title}]
+      new_itinerary[date] = [{activity_id: activity_id, title: title, link: link}]
     }
     //update the itinerary state variable
     setItinerary(new_itinerary)
@@ -62,19 +62,19 @@ const EventCard = ({ title, image, rating, link, price, description, activity_id
         <TruncatedText text={description} cutoffLength={200} />
 
         {/* <p className="text-lg font-bold mb-2">{`Price: $${price}`}</p> */}
-        <p className='text-lg font-bold mb-2'>{price}</p>
-        <a
+        {/* <p className='text-lg font-bold mb-2'>{price}</p> */}
+        {/* <a
           href={link}
           target="_blank"
           rel="noopener noreferrer"
           className="text-blue-500 hover:underline"
         >
           Get Tickets
-        </a>
+        </a> */}
         {
         addtimeline ?
         <div className='mt-4'>
-          <button onClick={() => handleAddActivity(itinerary, setItinerary, activity_id, date, title, trip_id)} className="bg-[#189490] hover:bg-[#17585E] text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-full">
+          <button onClick={() => handleAddActivity(itinerary, setItinerary, activity_id, date, title, link, trip_id)} className="bg-[#189490] hover:bg-[#17585E] text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-full">
             Add to Selected Date
           </button>
         </div> : <div></div>
@@ -221,14 +221,6 @@ export const ActivitiesView = () => {
     }
   }, [sessionActivities]);
   
-
-  // useEffect(() => {
-  //   if (dates.length > 0) {
-  //     setIsLoading(false);
-  //   } 
-  // }
-  // , [dates])
-
   useEffect(() => {
     
     // check if every value in sessionActivities is in they keys of activityDetails, if not, set isLoading to true, if so, set isLoading to false
@@ -237,44 +229,49 @@ export const ActivitiesView = () => {
     }
   }, [sessionActivities, activityDetails])
 
-
-  // if (!isLoading) {
-  //   return (  
-  //     // make the title above the loading bar say "Getting Your Activities"
-  //   <div>
-  //     <div className="flex justify-center items-center h-screen">
-  //       <div className="grid grid-cols-1 grid-rows-2 ">
-  //         <div className="row-span-1">
-  //           <p className='text-2xl text-[#189490]'>Getting Your Activities</p>
-  //         </div>
-  //         <div className="flex justify-center">
-  //           <BounceLoader color="#189490" size={100} />
-  //         </div>
-  //       </div>
-  //     </div>
-  //     <Chatbot />
-  //   </div> 
-  // )
-  // }
-
   return (
       sessionActivities.length > 0  && activityDetails && dates && itinerary ? 
       // check if every value in the sessionativities list has a corresponding value in the activityDetails list, if not, call the /get_activity endpoint and add that to the activityDetails list
       //make a sidebar that can be expanded on the right side to show the timeline, in addiditon to the chatbot and the activities
       <div>
-        <div className="container mx-auto mt-8">
+        <div className="container mx-auto mt-8 space-x-4">
           <div className="flex flex-row">
-            <div className="w-2/3">
-              { sessionActivities.map((item, index) => (
+            <div className='w-1/6'>
+            </div>
+            <div className="flex flex-col w-1/3">
+              <p className='text-4xl text-bold mb-5 justify-center'>Itinerary</p>
+              <div className="h-96 overflow-y-auto">
+                <TimelineWindow tripDates={dates} itinerary={itinerary} addtimeline={addtimeline} setaddtimeline={setAddTimeline} setdate={setCurrentDate} currentDate={currentDate}/>
+              </div>
+            </div> 
+            <div className="w-1/2">
+              <p className='text-4xl text-bold mb-5 justify-center'>Activities</p>              
+              <div className="h-96 overflow-y-auto">
+                { sessionActivities.map((item, index) => (
                 activityDetails[item] ?
                 <div>
-                  <EventCard key={index} {...activityDetails[item]} activity_id={item} addtimeline={addtimeline} itinerary={itinerary} setItinerary={setItinerary} date={currentDate} trip_id={trip_id}/>
+                  <EventCard key={index} 
+                    {...activityDetails[item]} 
+                    activity_id={item} 
+                    addtimeline={addtimeline} 
+                    itinerary={itinerary} 
+                    setItinerary={setItinerary} 
+                    date={currentDate} 
+                    trip_id={trip_id}/>
                 </div> : <div></div>
-              )) } 
+                )) } 
+
+              </div>
+              
             </div>
-            <div className="w-1/3">
-              <TimelineWindow tripDates={dates} itinerary={itinerary} addtimeline={addtimeline} setaddtimeline={setAddTimeline} setdate={setCurrentDate} currentDate={currentDate}/>
-            </div> 
+            <div className="w-1/6">
+              <button  className="bg-[#189490] hover:bg-[#17585E] text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 ml-5 mt-20">
+                Get Your Tickets
+              </button>
+            </div>
+            <div className='w-1/6'>
+            </div>
+            
           </div>
         </div>
         <Chatbot />

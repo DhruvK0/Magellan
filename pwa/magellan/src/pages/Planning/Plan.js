@@ -41,6 +41,14 @@ const TravelForm = () => {
     relaxing: false,
   });
   const [endDateError, setEndDateError] = useState('');
+  const [startDateError, setStartDateError] = useState('');
+
+  //get the current date and set it to current date, make sure it is in yyyy-mm-dd format
+  const today = new Date();
+  const currentDate = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+  console.log(currentDate);
+
+
   const [showDestinationError, setShowDestinationError] = useState(false); // New state variable
   const navigate = useNavigate();
   //get the uid from the user
@@ -72,10 +80,13 @@ const TravelForm = () => {
       } else {
         setShowDestinationError(true); // Set to true to display an error
       }
+    } else if (activeStep === 1 && startDate < currentDate) {
+      setStartDateError('Start date must be today or after');
     } else if (activeStep === 1 && endDate <= startDate) {
       setEndDateError('End date must be after the start date');
     } else {
       setEndDateError('');
+      setStartDateError('');
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
   };
@@ -206,6 +217,8 @@ const TravelForm = () => {
                     InputLabelProps={{
                       shrink: true,
                     }}
+                    error={startDateError !== ''}
+                    helperText={startDateError}
                   />
                   <TextField
                     label="End Date"

@@ -46,6 +46,7 @@ const EventCard = ({ title, image, rating, link, price, description, activity_id
   };
 
   return (
+    title == "No Title" ? <div></div> :
     <div className="flex border-2 rounded-lg p-4 max-w-xl mx-auto mb-4">
       {/* Left Column */}
       <div className="w-1/3">

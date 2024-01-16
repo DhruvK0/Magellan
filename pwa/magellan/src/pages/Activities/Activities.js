@@ -65,14 +65,14 @@ const EventCard = ({ title, image, rating, link, price, description, activity_id
 
         {/* <p className="text-lg font-bold mb-2">{`Price: $${price}`}</p> */}
         {/* <p className='text-lg font-bold mb-2'>{price}</p> */}
-        {/* <a
+        <a
           href={link}
           target="_blank"
           rel="noopener noreferrer"
           className="text-blue-500 hover:underline"
         >
           Get Tickets
-        </a> */}
+        </a>
         {
         addtimeline ?
         <div className='mt-4'>

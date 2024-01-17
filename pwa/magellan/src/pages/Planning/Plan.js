@@ -334,7 +334,7 @@ const TravelForm = () => {
                           }
                         />
                       }
-                      label="Soft Adventure"
+                      label="Low Intensity Adventure"
                     />
                     <FormControlLabel
                       control={
@@ -348,7 +348,7 @@ const TravelForm = () => {
                           }
                         />
                       }
-                      label="Hard Adventure"
+                      label="High Intensity Adventure"
                     />
                     <FormControlLabel
                       control={

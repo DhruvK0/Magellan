@@ -286,9 +286,9 @@ export const ActivitiesView = () => {
               
             </div>
             <div className="w-1/6">
-              <button  className="bg-[#189490] hover:bg-[#17585E] text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 ml-5 mt-20">
+              {/* <button  className="bg-[#189490] hover:bg-[#17585E] text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 ml-5 mt-20">
                 Get Your Tickets
-              </button>
+              </button> */}
             </div>
             <div className='w-1/6'>
             </div>

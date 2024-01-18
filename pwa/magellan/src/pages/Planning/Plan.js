@@ -264,13 +264,7 @@ const TravelForm = () => {
               {activeStep === 2 && (
                 <div className="space-y-4">
                   <Typography variant="h6">Preferences</Typography>
-                  <TextField
-                    label="Dietary Restrictions"
-                    variant="outlined"
-                    fullWidth
-                    value={dietaryRestrictions}
-                    onChange={(e) => setDietaryRestrictions(e.target.value)}
-                  />
+                  
                   {/* <TextField
                     label="Text Preferences"
                     variant="outlined"
@@ -393,6 +387,13 @@ const TravelForm = () => {
                       label="Relaxing"
                     />
                   </FormGroup>
+                  <TextField
+                    label="Dietary Restrictions"
+                    variant="outlined"
+                    fullWidth
+                    value={dietaryRestrictions}
+                    onChange={(e) => setDietaryRestrictions(e.target.value)}
+                  />
                 </div>
               )}
               <div className="mt-4 flex justify-between">

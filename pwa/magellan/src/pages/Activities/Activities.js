@@ -267,7 +267,7 @@ export const ActivitiesView = () => {
             </div> 
             <div className="w-1/2">
               <p className='text-4xl text-bold mb-5 justify-center'>Activities</p>              
-              <div className="h-96 overflow-y-auto pr-5">
+              <div className="pr-5">
                 { sessionActivities.map((item, index) => (
                 activityDetails[item] ?
                 <div>

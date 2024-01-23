@@ -99,7 +99,7 @@ const Navbar = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center text-3xl font-bold text-black">
           <img src={Magellan_Logo} alt="Magellan" className="w-14 h-14 mr-3" />
-          <span className='mb-1'>MAGELLAN</span>
+          <span className='mb-1'>AYVOO</span>
         </Link>
       </div>
 

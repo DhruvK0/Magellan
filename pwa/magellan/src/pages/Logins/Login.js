@@ -37,7 +37,7 @@ const Login = () => {
 
   return (
     <div>
-      <div className="flex justify-center">
+      {/* <div className="flex justify-center">
         <div className="p-4 box rounded-md w-1/6 shadow-lg bg-slate-100">
           <h2 className="mb-3 text-center">Firebase Auth Login</h2>
           {error && <Alert variant="danger">{error}</Alert>}
@@ -65,7 +65,8 @@ const Login = () => {
             </div>
           </Form>
         </div>
-      </div>
+      </div> */}
+      <div className="flex justify-center text-3xl"> Login </div>
       <div className="g-btn right-20 flex justify-center mt-10">
           <GoogleButton
             className="g-btn"
@@ -73,9 +74,9 @@ const Login = () => {
             onClick={handleGoogleSignIn}
           />
         </div>
-      <div className="p-4 box mt-3 text-center">
+      {/* <div className="p-4 box mt-3 text-center">
         Don't have an account? <Link to="/signup">Sign up</Link>
-      </div>
+      </div> */}
     </div>
   );
 };
